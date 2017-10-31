@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix --color --ext .js --ext .vue"
   },
   "dependencies": {
-    "element-ui": "^1.4.6",
+    "element-ui": "^2.0.2",
     "lodash": "^4.17.4",
     "vue": "^2.4.4"
   },
