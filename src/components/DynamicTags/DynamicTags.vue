@@ -20,7 +20,9 @@
         @blur="handleInputConfirm"
       >
       </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">
+        <slot>+ New Tag</slot>
+      </el-button>
     </span>
 
   </div>
@@ -65,9 +67,6 @@ export default {
     allowClose() {
       return !this.min || this.value.length > this.min
     },
-  },
-  mounted() {
-    console.log(this.vlaue, this.value.length)
   },
   methods: {
     handleClose(tag) {
