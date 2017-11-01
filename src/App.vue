@@ -1,10 +1,15 @@
 <template>
   <div id="app">
     <p>{{msg}}</p>
+
+    <!-- TODO: move/positoin to right place -->
+    <ProjectEditor/>
+
   </div>
 </template>
 
 <script>
+import ProjectEditor from './views/ProjectEditor.vue'
 // import _ from 'lodash'
 
 export default {
@@ -13,6 +18,9 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
     }
+  },
+  components: {
+    ProjectEditor,
   },
   computed: {},
   methods: {},
