@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import ProjectEditorForm from '../components/ProjectEditorForm.vue'
+import ProjectEditorForm from '../views/ProjectEditorForm.vue'
 
 export default {
   name: 'ProjectEditor',
