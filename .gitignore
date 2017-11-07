@@ -1,4 +1,9 @@
+# Webpack build output
 dist/
+
+# Firebase app credentials
+# see 'config/firebase.config.js.TEMPLATE' and create your own
+config/firebase\.config\.js
 
 
 
