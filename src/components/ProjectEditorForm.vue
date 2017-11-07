@@ -3,46 +3,81 @@
 
     <el-form 
       :model="form"
+      ref="projectEditorForm"
       label-position="right"
       label-width="5rem"
     >
 
       <!-- Name -->
-      <el-form-item label="專案名稱" required>
+      <el-form-item 
+        label="專案名稱" 
+        prop="name" 
+        :rules="[
+          { required: true, message: '此欄位為必填', trigger: 'change' },
+          { min: 3, max: 20, message: '長度須介於 3 到 20 個字元', trigger: 'change' }
+        ]" >
         <el-input v-model="form.name" />
       </el-form-item>
 
       <!-- Description -->
-      <el-form-item label="簡介">
+      <el-form-item 
+        label="簡介" 
+        prop="desc" 
+        :rules="[
+          { required: true, message: '此欄位為必填', trigger: 'change' },
+          { min: 5, max: 50, message: '長度須介於 5 到 50 個字元', trigger: 'change' } 
+        ]" >
         <el-input 
           v-model="form.desc" 
           type="textarea" 
           placeholder="50字內的簡單介紹。" 
-          :autosize="{ minRows: 2, maxRows: 4}" 
-        />
+          :autosize="{ minRows: 2, maxRows: 4}" />
       </el-form-item>
 
       <!-- Keyword -->
-      <el-form-item label="標籤">
+      <el-form-item label="標籤" prop="keywords">
         <dynamic-tags v-model="form.keywords" :max="3">+ 新增標籤</dynamic-tags>
       </el-form-item>
 
+      <!-- Custom fields (Note, Slide ...) -->
+      <el-form-item
+        v-for="item in ProjectDetailTypes" 
+        :label="item.name"
+        :key="item.key"
+        :prop="'detail.' + item.key"
+        :required="item.isRequired"
+        :rules="{ validator: makeRegexValidator(item.format, item.formatErrorMessage, item.isRequired) }" >
+        <el-input 
+          v-model="form.detail[item.key]"
+          :placeholder="item.description" />
+      </el-form-item>
+
+      <!-- Submit button -->
+      <el-form-item>
+        <el-button @click="$emit('cancel')">取 消</el-button>
+        <el-button type="primary" @click="submitForm('projectEditorForm')">儲 存</el-button>
+      </el-form-item>
+
     </el-form>
-
-    <el-button @click="$emit('cancel')">取 消</el-button>
-    <el-button type="primary" @click="onSubmit">儲 存</el-button>
-
   </section>
 </template>
 
 <script>
 import DynamicTags from '../components/DynamicTags/DynamicTags.vue'
+import ProjectDetailTypes from '../../config/project-detail-types.config.js'
 
 export default {
   name: 'ProjectEditorForm',
   data() {
+    // Initial value for `form.detail` data
+    const detailInitData = ProjectDetailTypes.reduce((accumulator, type) => {
+      accumulator[type.key] = ''
+      return accumulator
+    }, {})
+
     return {
       form: {
+        // Common fields
         name: '',
         desc: '',
         keywords: [],
@@ -50,8 +85,11 @@ export default {
           x: 0,
           y: 0,
         },
+        // Custom fields (see config/project-detail-tyoe.config.js)
+        detail: detailInitData,
       },
       formLabelWidth: '120px',
+      ProjectDetailTypes,
     }
   },
   components: {
@@ -59,10 +97,35 @@ export default {
   },
   computed: {},
   methods: {
-    onSubmit() {
+    updateProject() {
       // TODO: connect to Firebase
-      alert('[ProjectEditor] Submitting ', this.form)
+      this.$message({ type: 'success', message: '上傳成功' })
       this.dialogVisible = false
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.updateProject(this.form)
+        } else {
+          this.$message.error('儲存失敗')
+          return false
+        }
+      })
+    },
+    makeRegexValidator(regex, errorMessage, required) {
+      return (rule, value, callback) => {
+        const empty = !value
+
+        if (empty && required) {
+          callback('此欄位為必填')
+        } else if (empty && !required) {
+          callback()
+        } else if (!empty && regex.test(value)) {
+          callback()
+        } else {
+          callback(new Error(errorMessage))
+        }
+      }
     },
   },
 }
