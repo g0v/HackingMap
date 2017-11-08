@@ -5,6 +5,11 @@ import 'firebase/auth'
 import config from '../config/firebase.config.js'
 
 const FirebaseApp = Firebase.initializeApp(config)
+
+// Firebase Realtime Database
 const db = FirebaseApp.database()
 
-export default db
+// Firebase Auth
+// TODO: add signInWithGoogle, signOut...
+
+export { db }
