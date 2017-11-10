@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ProjectEditor from './views/ProjectEditor.vue'
+import ProjectEditor from '@/views/ProjectEditor'
 // import _ from 'lodash'
 
 export default {

@@ -63,8 +63,8 @@
 </template>
 
 <script>
-import DynamicTags from '../components/DynamicTags/DynamicTags.vue'
-import ProjectDetailTypes from '../../config/project-detail-types.config.js'
+import DynamicTags from '@/components/DynamicTags'
+import DetailTypes from '@/config/detailTypes.js'
 
 export default {
   name: 'ProjectEditorForm',
