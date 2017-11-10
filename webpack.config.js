@@ -14,6 +14,10 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
+        options: {
+          fix: true,
+          cache: true,
+        },
       },
       {
         test: /\.vue$/,
@@ -49,8 +53,10 @@ module.exports = {
     ],
   },
   resolve: {
+    extensions: ['.js', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, './src'),
     },
   },
   devServer: {
