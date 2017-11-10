@@ -41,14 +41,14 @@
 
       <!-- Custom fields (Note, Slide ...) -->
       <el-form-item
-        v-for="item in ProjectDetailTypes" 
+        v-for="(item, key) in DetailTypes" 
         :label="item.name"
-        :key="item.key"
-        :prop="'detail.' + item.key"
+        :key="key"
+        :prop="'detail.' + key"
         :required="item.isRequired"
         :rules="{ validator: makeRegexValidator(item.format, item.formatErrorMessage, item.isRequired) }" >
         <el-input 
-          v-model="form.detail[item.key]"
+          v-model="form.detail[key]"
           :placeholder="item.description" />
       </el-form-item>
 
@@ -65,31 +65,21 @@
 <script>
 import DynamicTags from '@/components/DynamicTags'
 import DetailTypes from '@/config/detailTypes.js'
+import mapValue from 'lodash'
 
 export default {
   name: 'ProjectEditorForm',
   data() {
-    // Initial value for `form.detail` data
-    const detailInitData = ProjectDetailTypes.reduce((accumulator, type) => {
-      accumulator[type.key] = ''
-      return accumulator
-    }, {})
-
     return {
       form: {
-        // Common fields
         name: '',
         desc: '',
         keywords: [],
-        position: {
-          x: 0,
-          y: 0,
-        },
-        // Custom fields (see config/project-detail-tyoe.config.js)
-        detail: detailInitData,
+        // Custom fields defined in config/detailTyoe.js
+        detail: mapValue(DetailTypes, () => ''),
       },
       formLabelWidth: '120px',
-      ProjectDetailTypes,
+      DetailTypes,
     }
   },
   components: {
