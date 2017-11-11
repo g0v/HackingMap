@@ -9,7 +9,7 @@
           </div>
 
           <div class="keywords">
-
+            <el-tag v-for="(keyword, index) in project.keywords" size="mini" :key="index">{{keyword}}</el-tag>
           </div>
           <div class="buttons">
             <el-button size="mini" icon="el-icon-location" round> Map </el-button>
@@ -47,6 +47,14 @@ export default {
 
 .desc {
   margin: 3px 5px 15px;
+}
+
+
+.keywords {
+  margin: 15px 5px;
+  .el-tag {
+    margin: 5px 5px;
+  }
 }
 
 .buttons {
