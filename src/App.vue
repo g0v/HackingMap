@@ -1,25 +1,44 @@
 <template>
   <div id="app">
-    <p>{{msg}}</p>
+    <el-container style="height: 100%">
+      <el-header>
+        Header
+        <p>{{msg}}</p>
+      </el-header>
+      <el-container>
+        <el-aside>
+          <TheList/>
+        </el-aside>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
 <script>
-// import _ from 'lodash'
+import TheList from '@/views/TheList'
 
 export default {
   name: 'app',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'Welcome to g0v Hacking Map',
     }
   },
   computed: {},
   methods: {},
+  components: {
+    TheList,
+  },
 }
 </script>
 
 <style lang="scss">
+html, body {
+  margin: 0px;
+  overflow: hidden;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -44,4 +63,22 @@ li {
 a {
   color: #42b983;
 }
+
+.el-header {
+  background-color: #B3C0D1;
+}
+
+.el-aside {
+  background-color: #FFF;
+}
+
+.el-main {
+  background-color: #E9EEF3;
+  height: calc(100vh - 60px);
+}
+
+.el-button [class^=fa]+span {
+    margin-left: 5px;
+}
+
 </style>
