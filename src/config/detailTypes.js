@@ -15,6 +15,10 @@ const detailTypes = {
     icon: 'fa fa-youtube-play',
     prefix: '',
   },
+  github: {
+    icon: 'fa fa-github',
+    prefix: '',
+  },
 }
 
 export { detailTypes }
