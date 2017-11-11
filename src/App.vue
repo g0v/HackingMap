@@ -9,7 +9,9 @@
         <el-aside>
           <TheList/>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <TheMap/>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -17,6 +19,7 @@
 
 <script>
 import TheList from '@/views/TheList'
+import TheMap from '@/views/TheMap'
 
 export default {
   name: 'app',
@@ -29,6 +32,7 @@ export default {
   methods: {},
   components: {
     TheList,
+    TheMap,
   },
 }
 </script>
