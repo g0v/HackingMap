@@ -1,6 +1,10 @@
 <template>
   <div id="theMap">
-    <img :src="mapSrc" :width="mapWidth" alt="background">
+    <svg id="svg">
+      <!-- <image :xlink:href="mapSrc" x="0" y="0" height="" width="50px"/> -->
+      <image :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
+    </svg>
+    <!-- <img :src="mapSrc" :width="mapWidth" alt="background"> -->
   </div>
 </template>
   
@@ -25,7 +29,7 @@ export default {
       .ref('map')
       .child('width')
       .once('value')
-      .then(snapshot => (this.mapWidth = snapshot.val() || '800'))
+      .then(snapshot => (this.mapWidth = snapshot.val() || '800' + 'px'))
 
     storage
       .ref('map/background.png')
@@ -42,4 +46,10 @@ export default {
 #theMap {
 }
 
+#svg {
+  // width: 100vw;
+  // height: 100vh;
+  width: 2000px;
+  height: 2000px;
+}
 </style>
