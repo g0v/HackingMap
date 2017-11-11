@@ -12,6 +12,7 @@
   "dependencies": {
     "element-ui": "^2.0.2",
     "firebase": "^4.6.1",
+    "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "vue": "^2.5.2",
     "vuefire": "^1.4.4"
