@@ -10,6 +10,7 @@
     "lint:fix": "eslint . --fix --color --ext .js --ext .vue"
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "element-ui": "^2.0.2",
     "firebase": "^4.6.1",
     "font-awesome": "^4.7.0",
