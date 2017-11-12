@@ -2,7 +2,6 @@ import Firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/auth'
 
-// Initialize Firebase
 const FirebaseApp = Firebase.initializeApp({
   apiKey: 'AIzaSyBt4bk9EhaxpYaZygrEfRUPYUUuzgnnEiM',
   authDomain: 'g0v-hackingmap.firebaseapp.com',
