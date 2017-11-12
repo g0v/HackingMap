@@ -67,6 +67,7 @@ export default {
     },
     activeKey(key) {
       this.$refs[`projectItem_${key}`][0].$el.scrollIntoView()
+      this.setActiveProjectKey(key)
     },
   },
   methods: {
