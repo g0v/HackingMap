@@ -1,5 +1,5 @@
 <template>
-  <section class="ProjectEditor">
+  <section class="CreateProjectButton">
 
     <!-- Dialog toggle button -->
     <el-button type="primary" @click="dialogVisible = true">編輯專案</el-button>
@@ -23,7 +23,7 @@
 import ProjectEditorForm from '@/views/ProjectEditorForm'
 
 export default {
-  name: 'ProjectEditor',
+  name: 'CreateProjectButton',
   data() {
     return {
       dialogVisible: true,
@@ -36,5 +36,5 @@ export default {
 </script>
 
 <style scoped>
-  /* .ProjectEditor {} */
+  /* .CreateProjectButton {} */
 </style>

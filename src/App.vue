@@ -3,13 +3,13 @@
     <p>{{msg}}</p>
 
     <!-- TODO: move/positoin to right place -->
-    <ProjectEditor/>
+    <CreateProjectButton />
 
   </div>
 </template>
 
 <script>
-import ProjectEditor from '@/views/ProjectEditor'
+import CreateProjectButton from '@/views/CreateProjectButton'
 // import _ from 'lodash'
 
 export default {
@@ -20,7 +20,7 @@ export default {
     }
   },
   components: {
-    ProjectEditor,
+    CreateProjectButton,
   },
   computed: {},
   methods: {},
