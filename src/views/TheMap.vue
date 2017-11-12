@@ -154,6 +154,12 @@ export default {
         y: Number(down.info.y) + (move.clientY - down.clientY),
         up,
       }))
+      .map(({ nodeKey, x, y, up }) => ({
+        nodeKey,
+        x: x < 50 ? 50 : x,
+        y: y < 50 ? 50 : y,
+        up,
+      }))
       .do(({ nodeKey, x, y }) => {
         // console.log("moveTempNode", {x, y})
         this.tempNode.x = x
