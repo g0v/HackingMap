@@ -26,8 +26,9 @@
           </div>
           <div class="buttons">
             <el-button 
-              size="mini" icon="el-icon-location" round
-              @click="setActiveProjectKey(project['.key'])"
+              size="mini" round
+              :icon="project.position ? 'el-icon-delete' : 'el-icon-location'"
+              @click="mapButtonClick(project)"
             > Map </el-button>
             <el-button size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
@@ -72,6 +73,26 @@ export default {
     setActiveProjectKey(key) {
       // console.log({ key })
       this.$store.commit('setActiveProjectKey', key)
+    },
+    mapButtonClick(project) {
+      const key = project['.key']
+
+      if (project.position) {
+        this.$firebaseRefs.projects
+          .child(key)
+          .child('position')
+          .remove()
+      } else {
+        this.$firebaseRefs.projects
+          .child(key)
+          .child('position')
+          .set({
+            x: 60,
+            y: 60,
+          })
+      }
+
+      this.setActiveProjectKey(key)
     },
   },
   components: {},

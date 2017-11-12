@@ -18,6 +18,7 @@
       </g>
       <template v-for="project in onBoardProjects">
         <g 
+          v-if="project.position"
           :id="`project_${project['.key']}`"
           class="projectNode"
           :transform="`translate(${project.position.x}, ${project.position.y})`"
