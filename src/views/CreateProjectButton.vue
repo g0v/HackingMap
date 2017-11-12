@@ -12,7 +12,7 @@
     >
 
       <!-- Form -->
-      <ProjectEditorForm @cancel="dialogVisible = false"/>
+      <ProjectEditor @cancel="dialogVisible = false"/>
 
     </el-dialog>
 
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import ProjectEditorForm from '@/views/ProjectEditorForm'
+import ProjectEditor from '@/views/ProjectEditor'
 
 export default {
   name: 'CreateProjectButton',
@@ -30,7 +30,7 @@ export default {
     }
   },
   components: {
-    ProjectEditorForm,
+    ProjectEditor,
   },
 }
 </script>

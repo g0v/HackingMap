@@ -1,5 +1,5 @@
 <template>
-  <section class="ProjectEditorForm">
+  <section class="ProjectEditor">
 
     <el-form 
       :model="form"
@@ -68,7 +68,7 @@ import DetailTypes from '@/config/detailTypes.js'
 import mapValue from 'lodash'
 
 export default {
-  name: 'ProjectEditorForm',
+  name: 'ProjectEditor',
   data() {
     return {
       form: {
@@ -122,5 +122,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  //.ProjectEditorForm {}
+  //.ProjectEditor {}
 </style>
