@@ -25,7 +25,10 @@
             <el-tag v-for="(keyword, index) in project.keywords" size="mini" :key="index">{{keyword}}</el-tag>
           </div>
           <div class="buttons">
-            <el-button size="mini" icon="el-icon-location" round> Map </el-button>
+            <el-button 
+              size="mini" icon="el-icon-location" round
+              @click="setActiveProjectKey(project['.key'])"
+            > Map </el-button>
             <el-button size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
           <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
@@ -60,10 +63,17 @@ export default {
   watch: {
     activeProjectKey(key) {
       this.activeKey = this.activeProjectKey
+    },
+    activeKey(key) {
       this.$refs[`projectItem_${key}`][0].$el.scrollIntoView()
     },
   },
-  methods: {},
+  methods: {
+    setActiveProjectKey(key) {
+      // console.log({ key })
+      this.$store.commit('setActiveProjectKey', key)
+    },
+  },
   components: {},
 }
 </script>

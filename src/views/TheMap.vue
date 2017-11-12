@@ -26,7 +26,7 @@
           @mouseover="() => { handleHover(project['.key']) }"
           @mouseleave="() => { handleLeave(project['.key']) }"
         >
-          <circle />
+          <circle :class="{ activeProject: project['.key'] == activeProjectKey }"/>
           <text>{{project.name}}</text>
         </g>
       </template>
@@ -217,9 +217,14 @@ g.projectNode {
   circle {
     r: 30;
     fill: white;
-    opacity: 0.8;
+    opacity: 0.7;
     stroke: #CCC;
     stroke-width: 2;
+    transition: 0.3s;
+    &.activeProject {
+      stroke-width: 3.5;
+      opacity: 0.9;
+    }
   }
   text {
     text-anchor: middle;
@@ -237,8 +242,8 @@ g#tempNode {
     opacity: 0.7;
     stroke: #CCC;
     stroke-width: 2;
-    stroke-dasharray: 4, 8; 
-    stroke-linecap: round;  
+    stroke-dasharray: 4, 8;
+    stroke-linecap: round;
   }
 }
 
