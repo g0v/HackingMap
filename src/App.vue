@@ -74,6 +74,7 @@ a {
 
 .el-aside {
   background-color: #FFF;
+  height: calc(100vh - 60px);
 }
 
 .el-main {
@@ -83,7 +84,7 @@ a {
 }
 
 .el-button [class^=fa]+span {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 </style>

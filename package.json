@@ -18,7 +18,8 @@
     "rxjs": "^5.5.2",
     "vue": "^2.5.2",
     "vue-rx": "^5.0.0",
-    "vuefire": "^1.4.4"
+    "vuefire": "^1.4.4",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -13,9 +13,12 @@ import Rx from 'rxjs/Rx'
 import VueRx from 'vue-rx'
 Vue.use(VueRx, Rx)
 
+import store from '@/service/vuex.js'
+
 import 'font-awesome/css/font-awesome.min.css'
 
 new Vue({
   el: '#app',
+  store,
   render: h => h(App),
 })

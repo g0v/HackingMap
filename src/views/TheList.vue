@@ -1,8 +1,12 @@
 <template>
   <div id="theList">
-    <el-collapse v-model="active" accordion>
+    <el-collapse v-model="activeKey" accordion>
       <template v-for="(project, key) in projects">
-        <el-collapse-item :title="project.name" :name="key">
+        <el-collapse-item
+          :title="project.name"
+          :name="project['.key']"
+          :ref="`projectItem_${project['.key']}`"
+        >
           <p class="desc">{{project.desc}}</p>
           <div class="detail">
             <template v-for="(detail, key) in project.detail">
@@ -24,6 +28,7 @@
             <el-button size="mini" icon="el-icon-location" round> Map </el-button>
             <el-button size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
+          <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
         </el-collapse-item>
       </template>
     </el-collapse>
@@ -31,6 +36,9 @@
 </template>
   
 <script>
+import _ from 'lodash'
+import { mapState } from 'vuex'
+
 import { db } from '@/service/firebase'
 import { detailTypes } from '@/config/detailTypes'
 
@@ -41,12 +49,20 @@ export default {
   },
   data() {
     return {
-      active: null,
+      activeKey: '',
       ready: false,
       detailTypes,
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['activeProjectKey']),
+  },
+  watch: {
+    activeProjectKey(key) {
+      this.activeKey = this.activeProjectKey
+      this.$refs[`projectItem_${key}`][0].$el.scrollIntoView()
+    },
+  },
   methods: {},
   components: {},
 }

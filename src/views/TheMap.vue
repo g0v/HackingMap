@@ -35,8 +35,10 @@
 </template>
   
 <script>
-import { db, storage } from '@/service/firebase'
 import Rx from 'rxjs/Rx'
+import { mapState } from 'vuex'
+
+import { db, storage } from '@/service/firebase'
 
 function observer(label = '') {
   return {
@@ -69,6 +71,7 @@ export default {
       // TODO: filter if poject has position info
       return this.projects
     },
+    ...mapState(['activeProjectKey']),
   },
   subscriptions() {
     // declare the receiving Subjects
@@ -171,11 +174,14 @@ export default {
   },
   methods: {
     handleHover(key) {
-      console.log(`handleHover(${key})`)
+      // console.log(`handleHover(${key})`)
+
       this.cursor = 'move'
+      this.$store.commit('setActiveProjectKey', key)
     },
     handleLeave(key) {
-      console.log(`handleLeave(${key})`)
+      // console.log(`handleLeave(${key})`)
+
       this.cursor = ''
     },
     moveNode({ nodeKey, newPosition }) {
