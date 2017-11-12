@@ -1,8 +1,20 @@
 <template>
   <div id="theMap">
-    <svg id="svg">
+    <svg id="svg"
+      v-stream:mousedown = "mouseDown$"
+      v-stream:mouseup = "mouseUp$"
+      v-stream:mousemove = "mouseMove$"
+      v-stream:mouseleave = "mouseLeave$"
+    >
       <!-- <image :xlink:href="mapSrc" x="0" y="0" height="" width="50px"/> -->
-      <image :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
+      <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
+      <g
+        id="tempNode"
+        :style="{ opacity: tempNode.show ? 1 : 0 }"
+        :transform="`translate(${tempNode.x}, ${tempNode.y})`"
+      >
+        <circle />
+      </g>
       <template v-for="project in onBoardProjects">
         <g 
           :id="`project_${project['.key']}`"
@@ -10,6 +22,7 @@
           :transform="`translate(${project.position.x},${project.position.y})`"
           :key="project['.key']"
           @click="() => { handleClick(project['.key']) }"
+          :data-key="project['.key']"
           @mouseover="() => { handleHover(project['.key']) }"
         >
           <circle />
@@ -22,6 +35,15 @@
   
 <script>
 import { db, storage } from '@/service/firebase'
+import Rx from 'rxjs/Rx'
+
+function observer(label = '') {
+  return {
+    next: n => console.log(label, 'Next: ', n),
+    error: e => console.log(label, 'Error: ', e),
+    complete: c => console.log(label, c, 'Completed'),
+  }
+}
 
 export default {
   name: 'TheMap',
@@ -33,6 +55,11 @@ export default {
       mapSrc: '',
       mapWidth: '',
       ready: false,
+      tempNode: {
+        show: false,
+        x: '20',
+        y: '30',
+      },
     }
   },
   computed: {
@@ -40,6 +67,15 @@ export default {
       // TODO: filter if poject has position info
       return this.projects
     },
+  },
+  subscriptions() {
+    // declare the receiving Subjects
+    this.mouseDown$ = new Rx.Subject().pluck('event')
+    this.mouseUp$ = new Rx.Subject().pluck('event')
+    this.mouseMove$ = new Rx.Subject().pluck('event')
+    this.mouseLeave$ = new Rx.Subject().pluck('event')
+
+    return {}
   },
   created() {
     db
@@ -54,12 +90,97 @@ export default {
       .then(url => (this.mapSrc = url))
       .catch(err => console.error(err))
   },
+  mounted() {
+    const mouseTracker$ = this.mouseDown$
+      // .pluck('event')
+      .map(down => {
+        // console.log({ down })
+        const nodeDOM = down.target.closest('g.projectNode')
+        const svgDOM = down.target.closest('svg')
+
+        down.purpose = nodeDOM ? 'move' : 'none'
+
+        switch (down.purpose) {
+          case 'move': {
+            this.tempNode.show = true
+            const [x, y] = nodeDOM.getAttribute('transform').match(/-?\d+/g)
+            down.info = { x, y, nodeDOM }
+            break
+          }
+        }
+
+        // console.log('down purpose : ', down.purpose, down.info)
+
+        return this.mouseMove$
+          .takeUntil(this.mouseUp$.merge(this.mouseLeave$))
+          .map(move => ({ move, down }))
+          .combineLatest(
+            // get the lastest mouse up event
+            this.mouseUp$
+              .merge(this.mouseLeave$)
+              .mapTo(true)
+              .first()
+              .startWith(false),
+            ({ move, down }, up) => ({ move, down, up })
+          )
+      })
+      .concatAll()
+      .do(({ move, down }) => {
+        // console.log('mouseTracker$', { move, down })
+
+        // prevent text/element selection with cursor drag
+        down.preventDefault()
+        move.preventDefault()
+        down.stopPropagation()
+        move.stopPropagation()
+      })
+      .share()
+
+    const moveNode$ = mouseTracker$
+      .filter(({ down }) => down.purpose == 'move')
+      .do(({ down, move }) => {
+        // console.log('moveNode$', { move, down })
+      })
+      // .throttleTime(30) // limit execution times for opt performance
+      .map(({ down, move, up }) => ({
+        nodeKey: down.info.nodeDOM.getAttribute('data-key'),
+        x: Number(down.info.x) + (move.clientX - down.clientX),
+        y: Number(down.info.y) + (move.clientY - down.clientY),
+        up,
+      }))
+      .do(({ nodeKey, x, y }) => {
+        // console.log("moveTempNode", {x, y})
+        this.tempNode.x = x
+        this.tempNode.y = y
+      })
+      .filter(({ up }) => up)
+      .do(({ nodeKey, x, y }) => {
+        console.log('moveNode', { nodeKey, x, y })
+
+        this.tempNode.show = false
+
+        const newPosition = { x, y }
+        const moveNode = { nodeKey, newPosition }
+
+        this.moveNode(moveNode)
+      })
+
+    this.$subscribeTo(moveNode$, ...observer('moveNode$'))
+  },
   methods: {
     handleClick(key) {
       console.log(`handleClick(${key})`)
     },
     handleHover(key) {
       console.log(`handleHover(${key})`)
+    },
+    moveNode({ nodeKey, newPosition }) {
+      // console.log('moveNode()', { nodeKey, newPosition })
+
+      this.$firebaseRefs.projects
+        .child(nodeKey)
+        .child('position')
+        .set(newPosition)
     },
   },
   components: {},
@@ -75,6 +196,11 @@ export default {
   // height: 100vh;
   width: 2000px;
   height: 2000px;
+
+}
+
+.background {
+  opacity: 0.4;
 }
 
 g.projectNode {
@@ -94,5 +220,16 @@ g.projectNode {
   }
 }
 
+g#tempNode {
+  circle {
+    r: 30;
+    fill: white;
+    opacity: 0.7;
+    stroke: #CCC;
+    stroke-width: 2;
+    stroke-dasharray: 4, 8; 
+    stroke-linecap: round;  
+  }
+}
 
 </style>
