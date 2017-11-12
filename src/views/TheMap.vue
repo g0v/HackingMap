@@ -5,6 +5,7 @@
       v-stream:mouseup = "mouseUp$"
       v-stream:mousemove = "mouseMove$"
       v-stream:mouseleave = "mouseLeave$"
+      :style="{ cursor: cursor }"
     >
       <!-- <image :xlink:href="mapSrc" x="0" y="0" height="" width="50px"/> -->
       <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
@@ -19,11 +20,11 @@
         <g 
           :id="`project_${project['.key']}`"
           class="projectNode"
-          :transform="`translate(${project.position.x},${project.position.y})`"
+          :transform="`translate(${project.position.x}, ${project.position.y})`"
           :key="project['.key']"
-          @click="() => { handleClick(project['.key']) }"
           :data-key="project['.key']"
           @mouseover="() => { handleHover(project['.key']) }"
+          @mouseleave="() => { handleLeave(project['.key']) }"
         >
           <circle />
           <text>{{project.name}}</text>
@@ -52,6 +53,7 @@ export default {
   },
   data() {
     return {
+      cursor: '',
       mapSrc: '',
       mapWidth: '',
       ready: false,
@@ -168,11 +170,13 @@ export default {
     this.$subscribeTo(moveNode$, ...observer('moveNode$'))
   },
   methods: {
-    handleClick(key) {
-      console.log(`handleClick(${key})`)
-    },
     handleHover(key) {
       console.log(`handleHover(${key})`)
+      this.cursor = 'move'
+    },
+    handleLeave(key) {
+      console.log(`handleLeave(${key})`)
+      this.cursor = ''
     },
     moveNode({ nodeKey, newPosition }) {
       // console.log('moveNode()', { nodeKey, newPosition })
