@@ -1,14 +1,19 @@
 <template>
   <div id="app">
     <p>{{msg}}</p>
+    <FireAuth />
   </div>
 </template>
 
 <script>
+import FireAuth from '@/views/FireAuth'
 // import _ from 'lodash'
 
 export default {
   name: 'app',
+  components: {
+    FireAuth,
+  },
   data() {
     return {
       msg: 'Welcome to Your Vue.js App',
@@ -37,7 +42,7 @@ ul {
 }
 
 li {
-  display: inline-block;
+  // display: inline-block;
   margin: 0 10px;
 }
 
