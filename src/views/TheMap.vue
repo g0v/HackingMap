@@ -222,8 +222,10 @@ g.projectNode {
     stroke-width: 2;
     transition: 0.3s;
     &.activeProject {
-      stroke-width: 3.5;
+      stroke-width: 3;
       opacity: 0.9;
+      r: 35;
+      animation: stroke-blinker 1.5s ease-in infinite;
     }
   }
   text {
@@ -247,4 +249,7 @@ g#tempNode {
   }
 }
 
+@keyframes stroke-blinker {  
+  50% { stroke-opacity: 0.65; }
+}
 </style>
