@@ -3,8 +3,20 @@
     <svg id="svg">
       <!-- <image :xlink:href="mapSrc" x="0" y="0" height="" width="50px"/> -->
       <image :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
+      <template v-for="project in onBoardProjects">
+        <g 
+          :id="`project_${project['.key']}`"
+          class="projectNode"
+          :transform="`translate(${project.position.x},${project.position.y})`"
+          :key="project['.key']"
+          @click="() => { handleClick(project['.key']) }"
+          @mouseover="() => { handleHover(project['.key']) }"
+        >
+          <circle />
+          <text>{{project.name}}</text>
+        </g>
+      </template>
     </svg>
-    <!-- <img :src="mapSrc" :width="mapWidth" alt="background"> -->
   </div>
 </template>
   
@@ -23,7 +35,12 @@ export default {
       ready: false,
     }
   },
-  computed: {},
+  computed: {
+    onBoardProjects() {
+      // TODO: filter if poject has position info
+      return this.projects
+    },
+  },
   created() {
     db
       .ref('map')
@@ -37,7 +54,14 @@ export default {
       .then(url => (this.mapSrc = url))
       .catch(err => console.error(err))
   },
-  methods: {},
+  methods: {
+    handleClick(key) {
+      console.log(`handleClick(${key})`)
+    },
+    handleHover(key) {
+      console.log(`handleHover(${key})`)
+    },
+  },
   components: {},
 }
 </script>
@@ -52,4 +76,23 @@ export default {
   width: 2000px;
   height: 2000px;
 }
+
+g.projectNode {
+  circle {
+    r: 30;
+    fill: white;
+    opacity: 0.8;
+    stroke: #CCC;
+    stroke-width: 2;
+  }
+  text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-size: 8px;
+    font-family: 'Monospace';
+    fill: #536469;
+  }
+}
+
+
 </style>
