@@ -1,6 +1,6 @@
 <template>
   <div id="theList">
-    <el-collapse v-model="activeKey" accordion>
+    <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
           :title="project.name"
@@ -53,7 +53,6 @@ export default {
   },
   data() {
     return {
-      activeKey: '',
       ready: false,
       detailTypes,
     }
@@ -63,11 +62,9 @@ export default {
   },
   watch: {
     activeProjectKey(key) {
-      this.activeKey = this.activeProjectKey
-    },
-    activeKey(key) {
-      this.$refs[`projectItem_${key}`][0].$el.scrollIntoView()
-      this.setActiveProjectKey(key)
+      this.$nextTick(() => {
+        this.$refs[`projectItem_${key}`][0].$el.scrollIntoView()
+      })
     },
   },
   methods: {
@@ -92,8 +89,6 @@ export default {
             y: 60,
           })
       }
-
-      this.setActiveProjectKey(key)
     },
   },
   components: {},
