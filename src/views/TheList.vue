@@ -5,6 +5,7 @@
         <el-collapse-item
           :name="project['.key']"
           :ref="`projectItem_${project['.key']}`"
+          :key="project['.key']"
         >
           <span slot="title" class="item-title">
             {{project.name}}
@@ -13,9 +14,9 @@
           <p class="desc">{{project.desc}}</p>
           <div class="detail">
             <template v-for="(detail, key) in project.detail">
-              <el-tooltip effect="dark" :content="detail" placement="top">
+              <el-tooltip effect="dark" :content="detail" placement="top" :key="key">
                 <a 
-                  class="detailButton" target="_blank" :key="key"
+                  class="detailButton" target="_blank"
                   :href="detailTypes[key].prefix + detail"
                 >
                   <i :class="detailTypes[key].icon"></i>
