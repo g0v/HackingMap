@@ -36,7 +36,7 @@
 
       <!-- Keyword -->
       <el-form-item label="標籤" prop="keywords">
-        <dynamic-tags v-model="form.keywords" :max="3">+ 新增標籤</dynamic-tags>
+        <DynamicTags v-model="form.keywords" :max="3">+ 新增標籤</DynamicTags>
       </el-form-item>
 
       <!-- Custom fields (Note, Slide ...) -->
@@ -69,6 +69,9 @@ import mapValue from 'lodash'
 
 export default {
   name: 'ProjectEditor',
+  components: {
+    DynamicTags,
+  },
   props: {
     isOpen: {
       type: Boolean,
@@ -100,10 +103,23 @@ export default {
       detailTypes,
     }
   },
-  components: {
-    DynamicTags,
+  computed: {
+    isEditing() {
+      return this.isOpen && this.restoreData
+    },
+    isCreating() {
+      return this.isOpen && !this.restoreData
+    },
   },
-  computed: {},
+  watch: {
+    isOpen(isOpen) {
+      this.tryRestoreFields(this.restoreData)
+    },
+  },
+  mounted() {
+    // Open for the first time
+    this.tryRestoreFields(this.restoreData)
+  },
   methods: {
     updateProject() {
       // TODO: connect to Firebase
@@ -133,6 +149,17 @@ export default {
         } else {
           callback(new Error(errorMessage))
         }
+      }
+    },
+    tryRestoreFields(project) {
+      if (this.isEditing) {
+        // Restore Fields
+        Object.keys(project).forEach(key => {
+          this.form[key] = project[key]
+        })
+      } else if (this.isCreating) {
+        // Reset Fields
+        this.$refs['projectEditorForm'].resetFields()
       }
     },
   },
