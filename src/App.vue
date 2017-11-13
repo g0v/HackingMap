@@ -1,33 +1,48 @@
 <template>
   <div id="app">
-    <p>{{msg}}</p>
-
-    <!-- TODO: move/positoin to right place -->
-    <CreateProjectButton />
-
+    <el-container style="height: 100%">
+      <el-header>
+        Header
+        <p>{{msg}}</p>
+      </el-header>
+      <el-container>
+        <el-aside>
+          <TheList/>
+        </el-aside>
+        <el-main>
+          <TheMap/>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
 <script>
-import CreateProjectButton from '@/views/CreateProjectButton'
-// import _ from 'lodash'
+import TheList from '@/views/TheList'
+import TheMap from '@/views/TheMap'
 
 export default {
   name: 'app',
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'Welcome to g0v Hacking Map',
     }
-  },
-  components: {
-    CreateProjectButton,
   },
   computed: {},
   methods: {},
+  components: {
+    TheList,
+    TheMap,
+  },
 }
 </script>
 
 <style lang="scss">
+html, body {
+  margin: 0px;
+  overflow: hidden;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,4 +67,24 @@ li {
 a {
   color: #42b983;
 }
+
+.el-header {
+  background-color: #B3C0D1;
+}
+
+.el-aside {
+  background-color: #FFF;
+  height: calc(100vh - 60px);
+}
+
+.el-main {
+  padding: 0px;
+  background-color: #E9EEF3;
+  height: calc(100vh - 60px);
+}
+
+.el-button [class^=fa]+span {
+  margin-left: 5px;
+}
+
 </style>
