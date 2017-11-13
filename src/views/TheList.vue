@@ -3,10 +3,13 @@
     <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
-          :title="project.name"
           :name="project['.key']"
           :ref="`projectItem_${project['.key']}`"
         >
+          <span slot="title" class="item-title">
+            {{project.name}}
+            <i v-if="project.position" class="icon el-icon-location-outline"></i>
+          </span>
           <p class="desc">{{project.desc}}</p>
           <div class="detail">
             <template v-for="(detail, key) in project.detail">
@@ -97,6 +100,11 @@ export default {
 
 <style lang="scss" scoped>
 #theList {
+}
+
+.item-title {
+  i.icon {
+  }
 }
 
 .desc {
