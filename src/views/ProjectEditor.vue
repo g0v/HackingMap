@@ -41,7 +41,7 @@
 
       <!-- Custom fields (Note, Slide ...) -->
       <el-form-item
-        v-for="(item, key) in DetailTypes" 
+        v-for="(item, key) in detailTypes" 
         :label="item.name"
         :key="key"
         :prop="'detail.' + key"
@@ -64,11 +64,29 @@
 
 <script>
 import DynamicTags from '@/components/DynamicTags'
-import DetailTypes from '@/config/detailTypes.js'
+import { detailTypes } from '@/config/detailTypes.js'
 import mapValue from 'lodash'
 
 export default {
   name: 'ProjectEditor',
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+    restoreData: {
+      type: Object,
+      validator(project) {
+        if (project === null) {
+          // when creat new project
+          return true
+        } else {
+          // when edit existing project
+          return project['.key'] && project['name']
+        }
+      },
+    },
+  },
   data() {
     return {
       form: {
@@ -76,10 +94,10 @@ export default {
         desc: '',
         keywords: [],
         // Custom fields defined in config/detailTyoe.js
-        detail: mapValue(DetailTypes, () => ''),
+        detail: mapValue(detailTypes, () => ''),
       },
       formLabelWidth: '120px',
-      DetailTypes,
+      detailTypes,
     }
   },
   components: {

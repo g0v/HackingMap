@@ -1,5 +1,6 @@
 <template>
   <div id="theList">
+    <el-button @click="createProjec"> 新增專案 </el-button>
     <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
@@ -34,16 +35,29 @@
               :icon="project.position ? 'el-icon-delete' : 'el-icon-location'"
               @click="mapButtonClick(project)"
             > Map </el-button>
-            <el-button size="small" icon="el-icon-edit-outline" round> Edit </el-button>
+            <el-button @click="editProejct(project)" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
           <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
         </el-collapse-item>
       </template>
     </el-collapse>
+
+    <!-- Project Editor -->
+    <el-dialog 
+      :visible.sync="showProjectEditor"
+      :title="editingProject ? `編輯 ${editingProject.name}` : '新增專案'"
+    >
+      <ProjectEditor 
+        :isOpen="showProjectEditor"
+        :restoreData="editingProject"
+        @cancel="showProjectEditor = false"
+      />
+    </el-dialog>
   </div>
 </template>
   
 <script>
+import ProjectEditor from '@/views/ProjectEditor'
 import _ from 'lodash'
 import { mapState } from 'vuex'
 
@@ -59,6 +73,8 @@ export default {
     return {
       ready: false,
       detailTypes,
+      showProjectEditor: false,
+      editingProject: false,
     }
   },
   computed: {
@@ -94,8 +110,18 @@ export default {
           })
       }
     },
+    createProjec() {
+      this.editingProject = null
+      this.showProjectEditor = true
+    },
+    editProejct(project) {
+      this.editingProject = project
+      this.showProjectEditor = true
+    },
   },
-  components: {},
+  components: {
+    ProjectEditor,
+  },
 }
 </script>
 
