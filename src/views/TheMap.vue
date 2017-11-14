@@ -11,6 +11,7 @@
       <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
       <g
         id="tempNode"
+        style="cursor: -webkit-grabbing;"
         :style="{ opacity: tempNode.show ? 1 : 0 }"
         :transform="`translate(${tempNode.x}, ${tempNode.y})`"
       >
