@@ -1,6 +1,7 @@
 // Initialize firebase
 import Firebase from 'firebase/app'
 import 'firebase/database'
+import 'firebase/storage'
 import 'firebase/auth'
 
 const FirebaseApp = Firebase.initializeApp({
@@ -15,7 +16,10 @@ const FirebaseApp = Firebase.initializeApp({
 // Firebase Realtime Database
 const db = FirebaseApp.database()
 
+// Get a reference to the storage service, which is used to create references in your storage bucket
+const storage = FirebaseApp.storage()
+
 // Firebase Auth
 // TODO: add signInWithGoogle, signOut...
 
-export { db }
+export { db, storage }
