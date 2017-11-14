@@ -18,18 +18,34 @@
       </g>
       <template v-for="project in onBoardProjects">
         <g 
+          v-if="project.position"
           :id="`project_${project['.key']}`"
           class="projectNode"
+          :class="{ activeProject: project['.key'] == activeProjectKey }"
           :transform="`translate(${project.position.x}, ${project.position.y})`"
           :key="project['.key']"
           :data-key="project['.key']"
           @mouseover="() => { handleHover(project['.key']) }"
           @mouseleave="() => { handleLeave(project['.key']) }"
         >
-          <circle :class="{ activeProject: project['.key'] == activeProjectKey }"/>
+          <circle/>
           <text>{{project.name}}</text>
         </g>
       </template>
+
+      <g
+        v-if="activeProject"
+        id="project_top_node"
+        class="projectNode activeProject"
+        :transform="`translate(${activeProject.position.x}, ${activeProject.position.y})`"
+        :data-key="activeProject['.key']"
+        @mouseover="() => { handleHover(activeProject['.key']) }"
+        @mouseleave="() => { handleLeave(activeProject['.key']) }"
+      >
+        <circle/>
+        <text>{{activeProject.name}}</text>
+      </g>
+
     </svg>
   </div>
 </template>
@@ -69,10 +85,13 @@ export default {
   },
   computed: {
     onBoardProjects() {
-      return _.sortBy(
-        this.projects.filter(f => f.position),
-        s => s['.key'] == this.activeProjectKey
-      )
+      return this.projects
+    },
+    activeProjectIndex() {
+      return _.findIndex(this.projects, f => f['.key'] == this.activeProjectKey)
+    },
+    activeProject() {
+      return this.projects[this.activeProjectIndex]
     },
     ...mapState(['activeProjectKey']),
   },
@@ -223,19 +242,16 @@ export default {
 }
 
 g.projectNode {
+  > * {
+    opacity: 0.7;
+  }
+
   circle {
     r: 30;
     fill: white;
-    opacity: 0.7;
     stroke: #CCC;
     stroke-width: 2;
     transition: 0.3s;
-    &.activeProject {
-      stroke-width: 3;
-      opacity: 0.9;
-      r: 35;
-      animation: stroke-blinker 1.5s ease-in infinite;
-    }
   }
   text {
     text-anchor: middle;
@@ -243,6 +259,23 @@ g.projectNode {
     font-size: 8px;
     font-family: 'Monospace';
     fill: #536469;
+  }
+
+  &.activeProject {
+    > * {
+      opacity: 0.9;
+    }
+
+    circle {
+      stroke-width: 3;
+      opacity: 0.9;
+      r: 35;
+      animation: stroke-blinker 1.5s ease-in infinite;
+    }
+    text {
+
+    }
+
   }
 }
 
