@@ -33,18 +33,8 @@
         </g>
       </template>
 
-      <g
-        v-if="activeProject"
-        id="project_top_node"
-        class="projectNode activeProject"
-        :transform="`translate(${activeProject.position.x}, ${activeProject.position.y})`"
-        :data-key="activeProject['.key']"
-        @mouseover="() => { handleHover(activeProject['.key']) }"
-        @mouseleave="() => { handleLeave(activeProject['.key']) }"
-      >
-        <circle/>
-        <text>{{activeProject.name}}</text>
-      </g>
+      <!-- Copy active project's <g> node here to display it on top of all other nodes -->
+      <use :xlink:href="`#project_${activeProjectKey}`"/>
 
     </svg>
   </div>
@@ -122,16 +112,15 @@ export default {
       // .pluck('event')
       .map(down => {
         // console.log({ down })
-        const nodeDOM = down.target.closest('g.projectNode')
-        const svgDOM = down.target.closest('svg')
 
-        down.purpose = nodeDOM ? 'move' : 'none'
+        down.purpose = this.activeProject ? 'move' : 'none'
 
         switch (down.purpose) {
           case 'move': {
             this.tempNode.show = true
-            const [x, y] = nodeDOM.getAttribute('transform').match(/-?\d+/g)
-            down.info = { x, y, nodeDOM }
+            const nodeKey = this.activeProject['.key']
+            const { x, y } = this.activeProject.position
+            down.info = { x, y, nodeKey }
             break
           }
         }
@@ -170,7 +159,7 @@ export default {
       })
       // .throttleTime(30) // limit execution times for opt performance
       .map(({ down, move, up }) => ({
-        nodeKey: down.info.nodeDOM.getAttribute('data-key'),
+        nodeKey: down.info.nodeKey,
         x: Number(down.info.x) + (move.clientX - down.clientX),
         y: Number(down.info.y) + (move.clientY - down.clientY),
         up,
