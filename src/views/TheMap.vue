@@ -18,7 +18,6 @@
       </g>
       <template v-for="project in onBoardProjects">
         <g 
-          v-if="project.position"
           :id="`project_${project['.key']}`"
           class="projectNode"
           :transform="`translate(${project.position.x}, ${project.position.y})`"
@@ -36,6 +35,7 @@
 </template>
   
 <script>
+import _ from 'lodash'
 import Rx from 'rxjs/Rx'
 import { mapState } from 'vuex'
 
@@ -69,8 +69,10 @@ export default {
   },
   computed: {
     onBoardProjects() {
-      // TODO: filter if poject has position info
-      return this.projects
+      return _.sortBy(
+        this.projects.filter(f => f.position),
+        s => s['.key'] == this.activeProjectKey
+      )
     },
     ...mapState(['activeProjectKey']),
   },
