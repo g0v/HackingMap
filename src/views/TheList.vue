@@ -50,7 +50,7 @@
       <ProjectEditor 
         :isOpen="showProjectEditor"
         :restoreData="editingProject"
-        @cancel="showProjectEditor = false"
+        @closeDialog="showProjectEditor = false"
       />
     </el-dialog>
   </div>

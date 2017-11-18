@@ -11,7 +11,7 @@
       <!-- Name -->
       <el-form-item 
         label="專案名稱" 
-        prop="name" 
+        prop="name"
         :rules="[
           { required: true, message: '此欄位為必填', trigger: 'change' },
           { min: 3, max: 20, message: '長度須介於 3 到 20 個字元', trigger: 'change' }
@@ -54,7 +54,7 @@
 
       <!-- Submit button -->
       <el-form-item>
-        <el-button @click="$emit('cancel')">取 消</el-button>
+        <el-button @click="$emit('closeDialog')">取 消</el-button>
         <el-button type="primary" @click="submitForm('projectEditorForm')">儲 存</el-button>
       </el-form-item>
 
@@ -64,8 +64,9 @@
 
 <script>
 import DynamicTags from '@/components/DynamicTags'
+import { db } from '@/service/firebase'
 import { detailTypes } from '@/config/detailTypes.js'
-import { mapValues, omit, defaultsDeep } from 'lodash'
+import { mapValues, omit, omitBy, defaultsDeep } from 'lodash'
 
 export default {
   name: 'ProjectEditor',
@@ -89,6 +90,9 @@ export default {
         }
       },
     },
+  },
+  firebase: {
+    projects: db.ref('projects'),
   },
   data() {
     return {
@@ -122,17 +126,32 @@ export default {
     this.tryRestoreFields(this.restoreData)
   },
   methods: {
-    updateProject() {
-      // TODO: connect to Firebase
-      this.$message({ type: 'success', message: '上傳成功' })
-      this.dialogVisible = false
+    updateFirebaseDB(key, payload) {
+      this.$firebaseRefs.projects
+        .child(key)
+        .update(payload)
+        .then(() => {
+          this.$message(`${payload.name} 更新成功`)
+          this.$emit('closeDialog')
+        })
+        .catch(error => {
+          this.$message.error('更新專案失敗：', error.message)
+        })
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.updateProject(this.form)
+          const key = this.isCreating
+            ? this.$firebaseRefs.projects.push().key
+            : this.restoreData['.key']
+          const payload = {
+            ...this.form,
+            // Ignore empty detail fileds
+            detail: omitBy(this.form.detail, value => value === ''),
+          }
+          this.updateFirebaseDB(key, payload)
         } else {
-          this.$message.error('儲存失敗')
+          this.$message.error('資料格式不符')
           return false
         }
       })
