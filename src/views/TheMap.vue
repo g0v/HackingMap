@@ -11,6 +11,7 @@
       <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
       <g
         id="tempNode"
+        style="cursor: -webkit-grabbing;"
         :style="{ opacity: tempNode.show ? 1 : 0 }"
         :transform="`translate(${tempNode.x}, ${tempNode.y})`"
       >
@@ -21,21 +22,27 @@
           v-if="project.position"
           :id="`project_${project['.key']}`"
           class="projectNode"
+          :class="{ activeProject: project['.key'] == activeProjectKey }"
           :transform="`translate(${project.position.x}, ${project.position.y})`"
           :key="project['.key']"
           :data-key="project['.key']"
           @mouseover="() => { handleHover(project['.key']) }"
           @mouseleave="() => { handleLeave(project['.key']) }"
         >
-          <circle :class="{ activeProject: project['.key'] == activeProjectKey }"/>
+          <circle/>
           <text>{{project.name}}</text>
         </g>
       </template>
+
+      <!-- Copy active project's <g> node here to display it on top of all other nodes -->
+      <use :xlink:href="`#project_${activeProjectKey}`"/>
+
     </svg>
   </div>
 </template>
   
 <script>
+import _ from 'lodash'
 import Rx from 'rxjs/Rx'
 import { mapState } from 'vuex'
 
@@ -69,8 +76,13 @@ export default {
   },
   computed: {
     onBoardProjects() {
-      // TODO: filter if poject has position info
       return this.projects
+    },
+    activeProjectIndex() {
+      return _.findIndex(this.projects, f => f['.key'] == this.activeProjectKey)
+    },
+    activeProject() {
+      return this.projects[this.activeProjectIndex]
     },
     ...mapState(['activeProjectKey']),
   },
@@ -101,16 +113,15 @@ export default {
       // .pluck('event')
       .map(down => {
         // console.log({ down })
-        const nodeDOM = down.target.closest('g.projectNode')
-        const svgDOM = down.target.closest('svg')
 
-        down.purpose = nodeDOM ? 'move' : 'none'
+        down.purpose = this.activeProject ? 'move' : 'none'
 
         switch (down.purpose) {
           case 'move': {
             this.tempNode.show = true
-            const [x, y] = nodeDOM.getAttribute('transform').match(/-?\d+/g)
-            down.info = { x, y, nodeDOM }
+            const nodeKey = this.activeProject['.key']
+            const { x, y } = this.activeProject.position
+            down.info = { x, y, nodeKey }
             break
           }
         }
@@ -149,7 +160,7 @@ export default {
       })
       // .throttleTime(30) // limit execution times for opt performance
       .map(({ down, move, up }) => ({
-        nodeKey: down.info.nodeDOM.getAttribute('data-key'),
+        nodeKey: down.info.nodeKey,
         x: Number(down.info.x) + (move.clientX - down.clientX),
         y: Number(down.info.y) + (move.clientY - down.clientY),
         up,
@@ -221,19 +232,16 @@ export default {
 }
 
 g.projectNode {
+  > * {
+    opacity: 0.7;
+  }
+
   circle {
     r: 30;
     fill: white;
-    opacity: 0.7;
     stroke: #CCC;
     stroke-width: 2;
     transition: 0.3s;
-    &.activeProject {
-      stroke-width: 3;
-      opacity: 0.9;
-      r: 35;
-      animation: stroke-blinker 1.5s ease-in infinite;
-    }
   }
   text {
     text-anchor: middle;
@@ -241,6 +249,23 @@ g.projectNode {
     font-size: 8px;
     font-family: 'Monospace';
     fill: #536469;
+  }
+
+  &.activeProject {
+    > * {
+      opacity: 0.9;
+    }
+
+    circle {
+      stroke-width: 3;
+      opacity: 0.9;
+      r: 35;
+      animation: stroke-blinker 1.5s ease-in infinite;
+    }
+    text {
+
+    }
+
   }
 }
 
