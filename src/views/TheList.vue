@@ -1,6 +1,6 @@
 <template>
   <div id="theList">
-    <el-button @click="createProjec"> 新增專案 </el-button>
+    <el-button @click="createProject"> 新增專案 </el-button>
     <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
@@ -110,7 +110,7 @@ export default {
           })
       }
     },
-    createProjec() {
+    createProject() {
       this.editingProject = null
       this.showProjectEditor = true
     },

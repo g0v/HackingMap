@@ -1,4 +1,4 @@
-const urlRe = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
+const urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
 
 const detailTypes = {
   slack: {
@@ -15,7 +15,7 @@ const detailTypes = {
     description: '專案的共筆 URL',
     icon: 'fa fa-book',
     prefix: '',
-    format: urlRe,
+    format: urlRegex,
     formatErrorMessage: '請輸入有效的網址',
     isRequired: true,
   },
@@ -24,7 +24,7 @@ const detailTypes = {
     description: '專案的簡報 URL',
     icon: 'fa fa-newspaper-o',
     prefix: '',
-    format: urlRe,
+    format: urlRegex,
     formatErrorMessage: '請輸入有效的網址',
     isRequired: false,
   },
@@ -33,7 +33,7 @@ const detailTypes = {
     description: '專案的影音介紹（如YouTube）',
     icon: 'fa fa-youtube-play',
     prefix: '',
-    format: urlRe,
+    format: urlRegex,
     formatErrorMessage: '請輸入有效的網址',
     isRequired: false,
   },

@@ -49,7 +49,8 @@
         :rules="{ validator: makeRegexValidator(item.format, item.formatErrorMessage, item.isRequired) }" >
         <el-input 
           v-model="form.detail[key]"
-          :placeholder="item.description" />
+          :placeholder="item.description" 
+        />
       </el-form-item>
 
       <!-- Submit button -->
