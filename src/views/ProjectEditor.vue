@@ -36,7 +36,7 @@
 
       <!-- Keyword -->
       <el-form-item label="標籤" prop="keywords">
-        <DynamicTags v-model="form.keywords" :max="3">+ 新增標籤</DynamicTags>
+        <dynamic-tags v-model="form.keywords" :max="3">+ 新增標籤</dynamic-tags>
       </el-form-item>
 
       <!-- Custom fields (Note, Slide ...) -->
@@ -65,7 +65,7 @@
 <script>
 import DynamicTags from '@/components/DynamicTags'
 import { detailTypes } from '@/config/detailTypes.js'
-import mapValue from 'lodash'
+import { mapValues, omit, defaultsDeep } from 'lodash'
 
 export default {
   name: 'ProjectEditor',
@@ -97,7 +97,7 @@ export default {
         desc: '',
         keywords: [],
         // Custom fields defined in config/detailTyoe.js
-        detail: mapValue(detailTypes, () => ''),
+        detail: mapValues(detailTypes, () => ''),
       },
       formLabelWidth: '120px',
       detailTypes,
@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     isEditing() {
-      return this.isOpen && this.restoreData
+      return this.isOpen && !!this.restoreData
     },
     isCreating() {
       return this.isOpen && !this.restoreData
@@ -113,11 +113,12 @@ export default {
   },
   watch: {
     isOpen(isOpen) {
+      // When dialog is open again
       this.tryRestoreFields(this.restoreData)
     },
   },
   mounted() {
-    // Open for the first time
+    // When dialog open for the first time
     this.tryRestoreFields(this.restoreData)
   },
   methods: {
@@ -153,12 +154,10 @@ export default {
     },
     tryRestoreFields(project) {
       if (this.isEditing) {
-        // Restore Fields
-        Object.keys(project).forEach(key => {
-          this.form[key] = project[key]
-        })
+        // Restore fields before editing existing project (preserve fields of empty string)
+        this.form = defaultsDeep(omit(project, '.key'), this.form)
       } else if (this.isCreating) {
-        // Reset Fields
+        // Reset fields to blank for a new project
         this.$refs['projectEditorForm'].resetFields()
       }
     },
