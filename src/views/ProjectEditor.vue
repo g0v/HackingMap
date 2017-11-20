@@ -75,7 +75,8 @@ export default {
     DynamicTags,
   },
   props: {
-    editingProjectID: String,
+    projectKey: String,
+    required: true,
   },
   firebase: {
     projects: db.ref('projects'),
@@ -93,18 +94,24 @@ export default {
       detailTypes,
     }
   },
+  computed: {
+    project() {
+      return _.find(this.projects, ['.key', this.projectKey])
+    },
+  },
   watch: {
-    editingProjectID(id) {
+    projectKey(key) {
       // When dialog is open again
-      this.initFields(id)
+      this.initFields(key)
     },
   },
   mounted() {
     // When dialog open for the first time
-    this.initFields(this.editingProjectID)
+    this.initFields(this.projectKey)
   },
   methods: {
     updateFirebaseDB(key, payload) {
+      console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
       this.$firebaseRefs.projects
         .child(key)
         .update(payload)
@@ -119,15 +126,12 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const key = this.isCreating
-            ? this.$firebaseRefs.projects.push().key
-            : this.restoreData['.key']
           const payload = {
             ...this.form,
-            // Ignore empty detail fileds
-            detail: _.omitBy(this.form.detail, value => value === ''),
+            // Ignore empty detail fileds aka ""
+            detail: _.omitBy(this.form.detail, _.isEmpty),
           }
-          this.updateFirebaseDB(key, payload)
+          this.updateFirebaseDB(this.projectKey, payload)
         } else {
           this.$message.error('資料格式不符')
           return false
@@ -149,14 +153,13 @@ export default {
         }
       }
     },
-    initFields(projectID) {
-      const oldData = this.projects.filter(p => p['.key'] === projectID)[0]
-      if (oldData) {
-        // Restore fields before editing existing project (preserve fields of empty string)
-        this.form = _.defaultsDeep(_.omit(oldData, '.key'), this.form)
-      } else {
+    initFields() {
+      if (!this.project) {
         // Reset fields to blank for a new project
         this.$refs['projectEditorForm'].resetFields()
+      } else {
+        // Restore fields before editing existing project (preserve fields of empty string)
+        this.form = _.defaultsDeep(_.omit(this.project, '.key'), this.form)
       }
     },
   },

@@ -43,13 +43,10 @@
     </el-collapse>
 
     <!-- Project Editor -->
-    <el-dialog 
-      :visible="!!editingProjectID"
-      :title="editingProjectID ? `編輯 ${editingProjectID}` : '新增專案'"
-    >
+    <el-dialog :visible="!!editingProjectKey" :show-close="false" :title="dialogTItle">
       <ProjectEditor 
-        :editingProjectID="editingProjectID" 
-        @closeDialog="editingProjectID = null" 
+        :projectKey="editingProjectKey" 
+        @closeDialog="editingProjectKey = null" 
       />
     </el-dialog>
   </div>
@@ -72,10 +69,14 @@ export default {
     return {
       ready: false,
       detailTypes,
-      editingProjectID: null,
+      editingProjectKey: null,
     }
   },
   computed: {
+    dialogTItle() {
+      const project = _.find(this.projects, ['.key', this.editingProjectKey])
+      return project ? `編輯${project.name}` : '新增專案'
+    },
     ...mapState(['activeProjectKey']),
   },
   watch: {
@@ -108,11 +109,11 @@ export default {
           })
       }
     },
-    editProejct(projectID) {
-      this.editingProjectID = projectID
+    editProejct(ProjectKey) {
+      this.editingProjectKey = ProjectKey
     },
     createProejct() {
-      this.editingProjectID = this.$firebaseRefs.projects.push().key
+      this.editingProjectKey = this.$firebaseRefs.projects.push().key
     },
   },
   components: {
