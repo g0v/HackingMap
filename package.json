@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "deploy": "mkdir public ; cp -r dist/. public/dist/ && cp index.html public/index.html && firebase deploy && rm -r public",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "lint": "eslint . --color --ext .js --ext .vue",
@@ -13,6 +14,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "element-ui": "^2.0.2",
     "firebase": "^4.6.1",
+    "firebase-tools": "^3.15.2",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "rxjs": "^5.5.2",
