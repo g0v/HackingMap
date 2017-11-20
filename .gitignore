@@ -1,6 +1,9 @@
 # Webpack build output
 dist/
 
+# Firebase hosting directory
+public/
+
 # Logs
 logs
 *.log
