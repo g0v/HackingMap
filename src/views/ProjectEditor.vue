@@ -75,22 +75,7 @@ export default {
     DynamicTags,
   },
   props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-    restoreData: {
-      type: Object,
-      validator(project) {
-        if (project === null) {
-          // when creat new project
-          return true
-        } else {
-          // when edit existing project
-          return project['.key'] && project['name']
-        }
-      },
-    },
+    editingProjectID: String,
   },
   firebase: {
     projects: db.ref('projects'),
@@ -108,23 +93,15 @@ export default {
       detailTypes,
     }
   },
-  computed: {
-    isEditing() {
-      return this.isOpen && !!this.restoreData
-    },
-    isCreating() {
-      return this.isOpen && !this.restoreData
-    },
-  },
   watch: {
-    isOpen(isOpen) {
+    editingProjectID(id) {
       // When dialog is open again
-      this.tryRestoreFields(this.restoreData)
+      this.initFields(id)
     },
   },
   mounted() {
     // When dialog open for the first time
-    this.tryRestoreFields(this.restoreData)
+    this.initFields(this.editingProjectID)
   },
   methods: {
     updateFirebaseDB(key, payload) {
@@ -172,11 +149,12 @@ export default {
         }
       }
     },
-    tryRestoreFields(project) {
-      if (this.isEditing) {
+    initFields(projectID) {
+      const oldData = this.projects.filter(p => p['.key'] === projectID)[0]
+      if (oldData) {
         // Restore fields before editing existing project (preserve fields of empty string)
-        this.form = defaultsDeep(omit(project, '.key'), this.form)
-      } else if (this.isCreating) {
+        this.form = defaultsDeep(omit(oldData, '.key'), this.form)
+      } else {
         // Reset fields to blank for a new project
         this.$refs['projectEditorForm'].resetFields()
       }
