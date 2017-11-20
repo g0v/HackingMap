@@ -67,7 +67,7 @@
 import DynamicTags from '@/components/DynamicTags'
 import { db } from '@/service/firebase'
 import { detailTypes } from '@/config/detailTypes.js'
-import { mapValues, omit, omitBy, defaultsDeep } from 'lodash'
+import _ from 'lodash'
 
 export default {
   name: 'ProjectEditor',
@@ -87,7 +87,7 @@ export default {
         desc: '',
         keywords: [],
         // Custom fields defined in config/detailTyoe.js
-        detail: mapValues(detailTypes, () => ''),
+        detail: _.mapValues(detailTypes, () => ''),
       },
       formLabelWidth: '120px',
       detailTypes,
@@ -125,7 +125,7 @@ export default {
           const payload = {
             ...this.form,
             // Ignore empty detail fileds
-            detail: omitBy(this.form.detail, value => value === ''),
+            detail: _.omitBy(this.form.detail, value => value === ''),
           }
           this.updateFirebaseDB(key, payload)
         } else {
@@ -153,7 +153,7 @@ export default {
       const oldData = this.projects.filter(p => p['.key'] === projectID)[0]
       if (oldData) {
         // Restore fields before editing existing project (preserve fields of empty string)
-        this.form = defaultsDeep(omit(oldData, '.key'), this.form)
+        this.form = _.defaultsDeep(_.omit(oldData, '.key'), this.form)
       } else {
         // Reset fields to blank for a new project
         this.$refs['projectEditorForm'].resetFields()
