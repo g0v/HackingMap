@@ -55,8 +55,9 @@
 
       <!-- Submit button -->
       <el-form-item>
+        <el-button icon="el-icon-delete" type="danger" plain @click="deleteProject(projectKey)" />
         <el-button @click="$emit('closeDialog')">取 消</el-button>
-        <el-button type="primary" @click="submitForm('projectEditorForm')">儲 存</el-button>
+        <el-button type="primary" @click="submitForm('projectEditorForm')" :loading="loadingSubmit">儲 存</el-button>
       </el-form-item>
 
     </el-form>
@@ -90,6 +91,7 @@ export default {
         // Custom fields defined in config/detailTyoe.js
         detail: _.mapValues(detailTypes, () => ''),
       },
+      loadingSubmit: false,
       formLabelWidth: '120px',
       detailTypes,
     }
@@ -111,16 +113,31 @@ export default {
   },
   methods: {
     updateFirebaseDB(key, payload) {
-      console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
+      // console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
+      this.loadingSubmit = true
       this.$firebaseRefs.projects
         .child(key)
         .update(payload)
         .then(() => {
+          this.loadingSubmit = false
           this.$message(`${payload.name} 更新成功`)
           this.$emit('closeDialog')
         })
         .catch(error => {
+          this.loadingSubmit = false
           this.$message.error('更新專案失敗：', error.message)
+        })
+    },
+    deleteProject(key) {
+      this.$firebaseRefs.projects
+        .child(key)
+        .set(null)
+        .then(() => {
+          this.$message(`刪除成功`)
+          this.$emit('closeDialog')
+        })
+        .catch(error => {
+          this.$message.error('刪除專案失敗：', error.message)
         })
     },
     submitForm(formName) {
