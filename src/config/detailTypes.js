@@ -1,4 +1,4 @@
-const urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
+const urlRegex = /http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
 
 const detailTypes = {
   slack: {
@@ -16,7 +16,7 @@ const detailTypes = {
     icon: 'fa fa-book',
     prefix: '',
     format: urlRegex,
-    formatErrorMessage: '請輸入有效的網址',
+    formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
     isRequired: true,
   },
   slide: {
@@ -25,7 +25,7 @@ const detailTypes = {
     icon: 'fa fa-newspaper-o',
     prefix: '',
     format: urlRegex,
-    formatErrorMessage: '請輸入有效的網址',
+    formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
     isRequired: false,
   },
   media: {
@@ -34,7 +34,7 @@ const detailTypes = {
     icon: 'fa fa-youtube-play',
     prefix: '',
     format: urlRegex,
-    formatErrorMessage: '請輸入有效的網址',
+    formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
     isRequired: false,
   },
   github: {
@@ -42,7 +42,7 @@ const detailTypes = {
     description: 'https://github.com/owner/repo',
     icon: 'fa fa-github',
     prefix: '',
-    format: /(https:\/\/)?github.com\/\w+\/\w+(\.git)?/,
+    format: /https:\/\/github.com\/\w+\/\w+(\.git)?/,
     formatErrorMessage: '請輸入有效的 GitHub repo 網址',
     isRequired: false,
   },
