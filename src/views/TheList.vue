@@ -41,22 +41,22 @@
       </template>
     </el-collapse>
 
-    <div id="listBottom">
-      <el-button
-        id="createProejctButton"
-        icon="el-icon-circle-plus"
-        @click="createProejct"
-      > 新增專案 </el-button>
-    </div>
+    <!-- Add new project -->
+    <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true">
+      <el-form-item prop="name" :rules="{ min: 3, max: 20, message: '須介於 3 ~ 20 個字元', trigger: 'blur' }">
+        <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button id="createProejctButton" @click="createProejct" size="small">新增</el-button>
+      </el-form-item>
+    </el-form>
 
     <!-- Project Editor -->
     <el-dialog :visible="!!editingProjectKey" :show-close="false" :title="dialogTItle">
-
       <ProjectEditor 
         :projectKey="editingProjectKey" 
         @closeDialog="editingProjectKey = null" 
       />
-
     </el-dialog>
   </div>
 </template>
@@ -79,6 +79,12 @@ export default {
       ready: false,
       detailTypes,
       editingProjectKey: null,
+      newProject: {
+        name: '',
+        detail: {
+          note: 'https://hackmd.io/',
+        },
+      },
     }
   },
   computed: {
@@ -122,7 +128,15 @@ export default {
       this.editingProjectKey = ProjectKey
     },
     createProejct() {
-      this.editingProjectKey = this.$firebaseRefs.projects.push().key
+      this.$refs['newProjectForm'].validate(valid => {
+        if (valid) {
+          this.editProejct(
+            this.$firebaseRefs.projects.push(this.newProject).key
+          )
+        } else {
+          this.$message({ message: '專案名稱須介於 3 ~ 20 個字元', type: 'warning' })
+        }
+      })
     },
   },
   components: {
@@ -170,12 +184,9 @@ export default {
   margin: 20px 5px 0px;
 }
 
-#listBottom {
-  height: 100px;
+.listBlock {
+  padding-top: 25px;
   #createProejctButton {
-    position: absolute;
-    bottom: 25px;
-    left: 150px;
     border-color: orange;
 
     &:hover {
