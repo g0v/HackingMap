@@ -5,17 +5,18 @@
       v-stream:mouseup = "mouseUp$"
       v-stream:mousemove = "mouseMove$"
       v-stream:mouseleave = "mouseLeave$"
-      :style="{ cursor: cursor }"
+      :cursor="cursor"
     >
       <!-- <image :xlink:href="mapSrc" x="0" y="0" height="" width="50px"/> -->
-      <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth"/>
+      <image class="background" :xlink:href="mapSrc" x="0" y="0" :width="mapWidth" :height="mapWidth"/>
       <g
         id="tempNode"
         style="cursor: -webkit-grabbing;"
-        :style="{ opacity: tempNode.show ? 1 : 0 }"
+        :opacity="tempNode.show ? 1 : 0"
         :transform="`translate(${tempNode.x}, ${tempNode.y})`"
+        cursor="move"
       >
-        <circle />
+        <circle r="30"/>
       </g>
       <template v-for="project in onBoardProjects">
         <g 
@@ -29,13 +30,13 @@
           @mouseover="() => { handleHover(project['.key']) }"
           @mouseleave="() => { handleLeave(project['.key']) }"
         >
-          <circle/>
+          <circle :r="project['.key'] == activeProjectKey ? 35 : 30"/>
           <text>{{project.name}}</text>
         </g>
       </template>
 
       <!-- Copy active project's <g> node here to display it on top of all other nodes -->
-      <use :xlink:href="`#project_${activeProjectKey}`"/>
+      <use :xlink:href="`#project_${activeProjectKey}`" style="cursor: move;"/>
 
     </svg>
   </div>
@@ -100,7 +101,7 @@ export default {
       .ref('map')
       .child('width')
       .once('value')
-      .then(snapshot => (this.mapWidth = snapshot.val() || '800' + 'px'))
+      .then(snapshot => (this.mapWidth = snapshot.val() || '800') + 'px')
 
     storage
       .ref('map/background.png')
@@ -237,7 +238,6 @@ g.projectNode {
   }
 
   circle {
-    r: 30;
     fill: white;
     stroke: #CCC;
     stroke-width: 2;
@@ -271,7 +271,6 @@ g.projectNode {
 
 g#tempNode {
   circle {
-    r: 30;
     fill: white;
     opacity: 0.7;
     stroke: #CCC;
