@@ -55,9 +55,17 @@
 
       <!-- Submit button -->
       <el-form-item>
-        <el-button icon="el-icon-delete" type="danger" plain @click="deleteProject(projectKey)" />
-        <el-button @click="$emit('closeDialog')">取 消</el-button>
-        <el-button type="primary" @click="submitForm('projectEditorForm')" :loading="loadingSubmit">儲 存</el-button>
+        <el-button
+          icon="el-icon-delete" type="danger" plain
+          class="float-right"
+          @click="deleteProject(projectKey)"
+        >刪 除</el-button>
+        <el-button
+          icon="el-icon-upload2" type="primary" 
+          class="float-left"
+          @click="submitForm('projectEditorForm')" :loading="loadingSubmit"
+        >儲 存</el-button>
+        <el-button icon="el-icon-close" class="float-left" @click="$emit('closeDialog')">取 消</el-button>
       </el-form-item>
 
     </el-form>
@@ -185,4 +193,11 @@ export default {
 
 <style lang="scss" scoped>
   //.ProjectEditor {}
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div id="theList">
-    <el-button @click="createProejct"> 新增專案 </el-button>
     <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
@@ -42,12 +41,22 @@
       </template>
     </el-collapse>
 
+    <div id="listBottom">
+      <el-button
+        id="createProejctButton"
+        icon="el-icon-circle-plus"
+        @click="createProejct"
+      > 新增專案 </el-button>
+    </div>
+
     <!-- Project Editor -->
     <el-dialog :visible="!!editingProjectKey" :show-close="false" :title="dialogTItle">
+
       <ProjectEditor 
         :projectKey="editingProjectKey" 
         @closeDialog="editingProjectKey = null" 
       />
+
     </el-dialog>
   </div>
 </template>
@@ -75,7 +84,7 @@ export default {
   computed: {
     dialogTItle() {
       const project = _.find(this.projects, ['.key', this.editingProjectKey])
-      return project ? `編輯${project.name}` : '新增專案'
+      return project ? `編輯 ${project.name}` : '新增專案'
     },
     ...mapState(['activeProjectKey']),
   },
@@ -159,5 +168,20 @@ export default {
 
 .buttons {
   margin: 20px 5px 0px;
+}
+
+#listBottom {
+  height: 100px;
+  #createProejctButton {
+    position: absolute;
+    bottom: 25px;
+    left: 150px;
+    border-color: orange;
+
+    &:hover {
+      background-color: white;
+      color: orange;
+    }
+  }
 }
 </style>
