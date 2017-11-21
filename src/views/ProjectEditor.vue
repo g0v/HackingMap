@@ -58,7 +58,7 @@
         <el-button
           icon="el-icon-delete" type="danger" plain
           class="float-right"
-          @click="deleteProject(projectKey)"
+          @click="deleteProject(projectKey, $event)"
         >刪 除</el-button>
         <el-button
           icon="el-icon-upload2" type="primary" 
@@ -136,7 +136,11 @@ export default {
           this.$message.error('更新專案失敗：', error.message)
         })
     },
-    deleteProject(key) {
+    deleteProject(key, $event) {
+      if (!$event.shiftKey) {
+        return this.askShiftKey()
+      }
+
       this.$firebaseRefs.projects
         .child(key)
         .set(null)
@@ -186,6 +190,9 @@ export default {
         // Restore fields before editing existing project (preserve fields of empty string)
         this.form = _.defaultsDeep(_.omit(this.project, '.key'), this.form)
       }
+    },
+    askShiftKey() {
+      this.$message.error('請按著 Shift 鍵')
     },
   },
 }
