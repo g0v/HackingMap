@@ -235,13 +235,13 @@ export default {
 g.projectNode {
   > * {
     opacity: 0.7;
+    transition: 0.5s;
   }
 
   circle {
     fill: white;
     stroke: #CCC;
     stroke-width: 2;
-    transition: 0.3s;
   }
   text {
     text-anchor: middle;
@@ -257,13 +257,14 @@ g.projectNode {
     }
 
     circle {
+      stroke: #fe6969;
       stroke-width: 3;
       opacity: 0.9;
       r: 35;
       animation: stroke-blinker 1.5s ease-in infinite;
     }
     text {
-
+      font-size: 14px;
     }
 
   }
