@@ -2,7 +2,7 @@
   <div id="app">
     <el-container style="height: 100%">
       <el-header>
-        <h3>g0v Hacking Map</h3>
+        <h3 style="color: #3a3a3a;">g0v Hacking Map <sub><i>Beta</i></sub> </h3>
       </el-header>
       <el-container>
         <el-aside>
@@ -41,9 +41,9 @@ export default {
         title: ' 這次大松為初次 Beta 測試 🎁',
         message: `
           <h4>後續規劃：</h4>
-          <p>１ 開源至 g0v Github</p>
-          <p>２ 開始調整 UI 設計 </p>
-          <p>３ 申請 domain </p>
+          <p>１ 開源至 g0v Github 。</p>
+          <p>２ 確認需求（e.g. 更新底圖）。</p>
+          <p>３ 優化整體 UI 🐳 。</p>
         `,
         duration: 12500,
         showClose: false,
