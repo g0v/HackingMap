@@ -1,0 +1,223 @@
+{
+  "map" : {
+    "created_time" : "1510388119958",
+    "src" : "http://xxx.firebase.storage/xxxx",
+    "width" : "800"
+  },
+  "projects" : {
+    "Cofacts" : {
+      "desc" : "徵求 crowd-sourcing",
+      "detail" : {
+        "media" : "chat bot",
+        "note" : "beta.hackfoldr.org/cofacts"
+      },
+      "keywords" : [ "會 google 的人" ],
+      "name" : "Cofacts / 真的假的",
+      "position" : {
+        "x" : 673,
+        "y" : 106
+      }
+    },
+    "JSonView" : {
+      "desc" : "徵求 '行銷、測試'",
+      "detail" : {
+        "slide" : "goo.gl/EfyZ5n"
+      },
+      "keywords" : [ "Android", "Eclipse", "好懂好用" ],
+      "name" : "JSonView(Android快速開發)"
+    },
+    "vTaiwan" : {
+      "desc" : "徵求 '法律、行銷'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1WuCDGCASI0F6Z9a5TkHxJSsiVKDJjot1vl9g4p8ptuM/edit?usp=sharing",
+        "note" : "https://g0v.hackpad.tw/vTaiwan-106.09.16--38bNZoqCDn4",
+        "slide" : "https://docs.google.com/presentation/d/1WuCDGCASI0F6Z9a5TkHxJSsiVKDJjot1vl9g4p8ptuM/edit?usp=sharing"
+      },
+      "keywords" : [ "vTaiwan", "法規調適" ],
+      "name" : "vTaiwan @ TAF",
+      "position" : {
+        "x" : 264,
+        "y" : 88
+      }
+    },
+    "「唐鳳做了什麼」預告！" : {
+      "desc" : "徵求 '錄影、公民記者、想問問題的人'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1xxnHE60LkX0JL31Ob-wqSS4sBL8N8PzByWfUzd4y40k/edit?usp=sharing"
+      },
+      "keywords" : [ "下午一點" ],
+      "name" : "「唐鳳做了什麼」預告！"
+    },
+    "企業永續資訊平台" : {
+      "desc" : "徵求 '前端、後端、設計、資料分析'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1pJxGkVfh_mNRdNAePLVwnWjVSg6iKggzJcGm3KMJD-o/edit?usp=sharing"
+      },
+      "keywords" : [ "開放CSR（企業社會責任）資料", "PDF爬蟲", "XBRL線上表單" ],
+      "name" : "企業永續資訊平台",
+      "position" : {
+        "x" : 60,
+        "y" : 60
+      }
+    },
+    "公有地大行賄" : {
+      "desc" : "徵求 '對於「公有資產與行賄」有興趣的人（？）'",
+      "detail" : {
+        "media" : "https://goo.gl/BwHvwo",
+        "note" : "https://g0v.hackpad.tw/1KopENAUlH6",
+        "slide" : "https://goo.gl/BwHvwo"
+      },
+      "keywords" : [ "公有地", "行賄", "司法案件" ],
+      "name" : "公有地大行賄 / 公有地大行動",
+      "position" : {
+        "x" : 256,
+        "y" : 291
+      }
+    },
+    "公民科技的資料保存與分析" : {
+      "desc" : "徵求 '資料分析、開發者'",
+      "detail" : {
+        "media" : "https://github.com/poga/civic-notebook",
+        "note" : "https://hackmd.io/CwI2FYAYBMDMGYC0l72I4wDG6AcBOYfRAQ0hAEYB2C6cANnywqA="
+      },
+      "keywords" : [ "資料", "備份", "去中心化" ],
+      "name" : "公民科技的資料保存與分析",
+      "position" : {
+        "x" : 505,
+        "y" : 320
+      }
+    },
+    "共享關心" : {
+      "desc" : "徵求 'front-end engineers'",
+      "detail" : {
+        "media" : "www.justwithin.org",
+        "note" : "https://g0v.hackpad.tw/Justwithin-dQ4KZ1vHxwX",
+        "slide" : "導演"
+      },
+      "keywords" : [ "國際張老師" ],
+      "name" : "共享關心(Justwithin)"
+    },
+    "國家寶藏" : {
+      "desc" : "徵求 '愛看英文史料的人 Javascript/React/RN 專案經理'",
+      "detail" : {
+        "media" : "https://www.nationaltreasure.tw",
+        "note" : "http://beta.hackfoldr.org/national-treasures",
+        "slide" : "https://docs.google.com/presentation/d/1pD54KK2zfD_I9Uaojqcgi9BlnFd8_6CpJPxukaRDbE4/edit?usp=sharing"
+      },
+      "keywords" : [ "開放資料 歷史 群眾參與" ],
+      "name" : "國家寶藏",
+      "position" : {
+        "x" : 395,
+        "y" : 247
+      }
+    },
+    "工商寶" : {
+      "desc" : "徵求 '後端、法律專業、熟悉公司法或公司設立流程之高手'",
+      "detail" : {
+        "media" : "https://goo.gl/9FxooG"
+      },
+      "keywords" : [ "公司設立", "word" ],
+      "name" : "工商寶(公司設立輔助工具",
+      "position" : {
+        "x" : 504,
+        "y" : 101
+      }
+    },
+    "工時紀錄上區塊鏈" : {
+      "desc" : "徵求 '區塊鏈、企劃，勞工專家'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1kXLSx6eW1SJxFoIXZrGQ730NUPWZfoiXqICvjVO3TjE/edit?usp=sharing",
+        "note" : "https://g0v.hackpad.tw/hqQGdzE8KJn"
+      },
+      "keywords" : [ "勞工", "區塊鏈" ],
+      "name" : "工時紀錄上區塊鏈",
+      "position" : {
+        "x" : 118,
+        "y" : 159
+      }
+    },
+    "我們都是李明哲" : {
+      "desc" : "徵求 '前端、設計師、文字工'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1d-kiD_b-MrWl3LNpIvGdjV8aXeVwZE_r-CA8uBAp3G4/edit#slide=id.g26381a553f_0_12",
+        "note" : "https://hackmd.io/GYQwxmAmYgbAtMMBOApvALLAHAJntsMBvGAKywAM2a2YGylQA==="
+      },
+      "keywords" : [ "李明哲", "中國", "維權" ],
+      "name" : "我們都是李明哲"
+    },
+    "拆解開放資料咨詢小組" : {
+      "desc" : "徵求 '資料整理者'",
+      "detail" : {
+        "media" : "https://docs.google.com/presentation/d/1-AvFvrQGiTRjoNsRs8H6FcSiQjBlvMfzK2foFKk_sLw/edit#slide=id.p",
+        "note" : "https://g0v.hackpad.tw/rfTpW5sFjkj"
+      },
+      "keywords" : [ "開放資料", "諮詢小組", "gov" ],
+      "name" : "拆解開放資料咨詢小組",
+      "position" : {
+        "x" : 580,
+        "y" : 175
+      }
+    },
+    "樣板劇逐字稿計畫" : {
+      "desc" : "徵求 '看得懂簡體、會螢幕截圖、會用 markdown (hackmd)'",
+      "detail" : {
+        "media" : "https://hackmd.io/c/ry2TPHV9W/%2Fs%2FBkkpi4uqb",
+        "note" : "https://hackmd.io/c/ry2TPHV9W/%2Fs%2FBkkpi4uqb",
+        "slide" : "https://docs.google.com/presentation/d/1MXQt7EJFtw9bx-v1rAve5aMr8GJUMjtofpcBiVESoeg/edit?usp=sharing"
+      },
+      "keywords" : [ "逐字稿", "markdown", "文字" ],
+      "name" : "樣板劇逐字稿計畫",
+      "position" : {
+        "x" : 591,
+        "y" : 55
+      }
+    },
+    "臉書陣亡者聯盟" : {
+      "desc" : "徵求 '帳號停權'",
+      "detail" : {
+      },
+      "keywords" : [ "臉書" ],
+      "name" : "臉書陣亡者聯盟"
+    },
+    "都市更新天眼通" : {
+      "desc" : "徵求 'front-end developer'",
+      "detail" : {
+        "media" : "https://www.slideshare.net/JasonHsu56/ss-78293143?ref=https://www.slideshare.net/JasonHsu56/slideshelf",
+        "note" : "https://urban-renewal.herokuapp.com/"
+      },
+      "keywords" : [ "都更  都市更新  資料視覺化" ],
+      "name" : "都市更新天眼通",
+      "position" : {
+        "x" : 302,
+        "y" : 405
+      }
+    },
+    "阿美語萌典" : {
+      "desc" : "徵求 '前端、後端、資料打字小幫手、設計'",
+      "detail" : {
+        "media" : "https://amis.moedict.tw/",
+        "slide" : "https://docs.google.com/presentation/d/1PUlcam9_lL49nhLEEpcDr3w7qlM-fOYO7yL2pm9k-sM/edit?usp=sharing"
+      },
+      "keywords" : [ "阿美語", "台灣原住民語與南島語", "台灣原住民族文化" ],
+      "name" : "阿美語萌典",
+      "position" : {
+        "x" : 571,
+        "y" : 424
+      }
+    },
+    "黑農松" : {
+      "desc" : "徵求 '揪團打怪，願意一起跟小農合作，透過現有開源應用，創造更多的可能'",
+      "detail" : {
+        "media" : "https://drive.google.com/open?id=0B5u8cSzbVq4WZ3BuZG4xSzJSWVU",
+        "note" : "https://www.facebook.com/groups/472962446424371/",
+        "slide" : "Facebook社團：黑農松籌備小組 // 黑客X青農交流區"
+      },
+      "keywords" : [ "農委會", "小農", "土地" ],
+      "name" : "黑農松",
+      "position" : {
+        "x" : 262,
+        "y" : 164
+      }
+    }
+  }
+}
