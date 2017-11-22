@@ -1,5 +1,6 @@
 <template>
-  <section class="ProjectEditor">
+  <el-dialog :visible.sync="dialogVisible" :show-close="true">
+    <div slot="title">編輯 {{ restoreFields.name }}</div>
 
     <el-form 
       :model="form"
@@ -14,7 +15,7 @@
         prop="name"
         :rules="[
           { required: true, message: '此欄位為必填', trigger: 'change' },
-          { min: 3, max: 25, message: '長度須介於 3 到 25 個字元', trigger: 'change' }
+          { min: 3, max: 30, message: '長度須介於 3 到 30 個字元', trigger: 'change' }
         ]" >
         <el-input v-model="form.name" />
       </el-form-item>
@@ -65,11 +66,11 @@
           class="float-left"
           @click="submitForm('projectEditorForm')" :loading="loadingSubmit"
         >儲 存</el-button>
-        <el-button icon="el-icon-close" class="float-left" @click="$emit('closeDialog')">取 消</el-button>
+        <el-button icon="el-icon-close" class="float-left" @click="dialogVisible = false">取 消</el-button>
       </el-form-item>
 
     </el-form>
-  </section>
+  </el-dialog>
 </template>
 
 <script>
@@ -84,14 +85,17 @@ export default {
     DynamicTags,
   },
   props: {
-    projectKey: String,
-    required: true,
+    projectKey: {
+      type: String,
+      required: false,
+    },
   },
   firebase: {
     projects: db.ref('projects'),
   },
   data() {
     return {
+      dialogVisible: false,
       form: {
         name: '',
         desc: '',
@@ -105,19 +109,26 @@ export default {
     }
   },
   computed: {
-    project() {
-      return _.find(this.projects, ['.key', this.projectKey])
+    restoreFields() {
+      const project = _.find(this.projects, ['.key', this.projectKey])
+      return project ? _.omit(project, '.key') : {}
     },
   },
   watch: {
     projectKey(key) {
-      // When dialog is open again
-      this.initFields(key)
+      // Whether a projectKey is passed triggers dialog to show/hide
+      this.dialogVisible = !!key
     },
-  },
-  mounted() {
-    // When dialog open for the first time
-    this.initFields(this.projectKey)
+    dialogVisible(visible) {
+      if (visible) {
+        // Restore fields for current project
+        this.form = _.defaultsDeep(this.restoreFields, this.form)
+      } else {
+        // Reset fields to blank
+        this.$refs['projectEditorForm'].resetFields()
+        this.$emit('update:projectKey', null)
+      }
+    },
   },
   methods: {
     updateFirebaseDB(key, payload) {
@@ -129,7 +140,7 @@ export default {
         .then(() => {
           this.loadingSubmit = false
           this.$message(`${payload.name} 更新成功`)
-          this.$emit('closeDialog')
+          this.dialogVisible = false
         })
         .catch(error => {
           this.loadingSubmit = false
@@ -146,7 +157,7 @@ export default {
         .set(null)
         .then(() => {
           this.$message(`刪除成功`)
-          this.$emit('closeDialog')
+          this.dialogVisible = false
         })
         .catch(error => {
           this.$message.error('刪除專案失敗：', error.message)
@@ -162,7 +173,7 @@ export default {
           }
           this.updateFirebaseDB(this.projectKey, payload)
         } else {
-          this.$message.error('資料格式不符')
+          this.$message.error('格式有誤')
           return false
         }
       })
@@ -182,15 +193,6 @@ export default {
         }
       }
     },
-    initFields() {
-      if (!this.project) {
-        // Reset fields to blank if done editing projcet
-        this.$refs['projectEditorForm'].resetFields()
-      } else {
-        // Restore fields before editing project (preserve fields of empty string w/ defaultsDeep)
-        this.form = _.defaultsDeep(_.omit(this.project, '.key'), this.form)
-      }
-    },
     askShiftKey() {
       this.$message.error('請按著 Shift 鍵')
     },
@@ -199,7 +201,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  //.ProjectEditor {}
 .float-right {
   float: right;
 }

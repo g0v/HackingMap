@@ -43,7 +43,7 @@
 
     <!-- Add new project -->
     <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true">
-      <el-form-item prop="name" :rules="{ min: 3, max: 20, message: '須介於 3 ~ 20 個字元', trigger: 'blur' }">
+      <el-form-item prop="name" :rules="{ min: 3, max: 30, message: '須介於 3 ~ 30 個字元', trigger: 'blur' }">
         <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
       </el-form-item>
       <el-form-item>
@@ -52,12 +52,7 @@
     </el-form>
 
     <!-- Project Editor -->
-    <el-dialog :visible="!!editingProjectKey" :show-close="false">
-      <ProjectEditor 
-        :projectKey="editingProjectKey" 
-        @closeDialog="editingProjectKey = null" 
-      />
-    </el-dialog>
+    <ProjectEditor :projectKey.sync="editingProjectKey" />
   </div>
 </template>
   
@@ -130,7 +125,7 @@ export default {
             this.$firebaseRefs.projects.push(this.newProject).key
           )
         } else {
-          this.$message({ message: '專案名稱須介於 3 ~ 20 個字元', type: 'warning' })
+          this.$message({ message: '格式有誤', type: 'warning' })
         }
       })
     },
