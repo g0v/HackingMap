@@ -14,7 +14,7 @@
         prop="name"
         :rules="[
           { required: true, message: '此欄位為必填', trigger: 'change' },
-          { min: 3, max: 20, message: '長度須介於 3 到 20 個字元', trigger: 'change' }
+          { min: 3, max: 25, message: '長度須介於 3 到 25 個字元', trigger: 'change' }
         ]" >
         <el-input v-model="form.name" />
       </el-form-item>
@@ -184,10 +184,10 @@ export default {
     },
     initFields() {
       if (!this.project) {
-        // Reset fields to blank for a new project
+        // Reset fields to blank if done editing projcet
         this.$refs['projectEditorForm'].resetFields()
       } else {
-        // Restore fields before editing existing project (preserve fields of empty string)
+        // Restore fields before editing project (preserve fields of empty string w/ defaultsDeep)
         this.form = _.defaultsDeep(_.omit(this.project, '.key'), this.form)
       }
     },

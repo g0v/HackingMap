@@ -34,7 +34,7 @@
               :icon="project.position ? 'el-icon-delete' : 'el-icon-location'"
               @click="mapButtonClick(project)"
             > Map </el-button>
-            <el-button @click="editProejct(project['.key'])" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
+            <el-button @click="editProject(project['.key'])" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
           <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
         </el-collapse-item>
@@ -47,12 +47,12 @@
         <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button id="createProejctButton" @click="createProejct" size="small">新增</el-button>
+        <el-button id="createProjectButton" @click="createProject" size="small">新增</el-button>
       </el-form-item>
     </el-form>
 
     <!-- Project Editor -->
-    <el-dialog :visible="!!editingProjectKey" :show-close="false" :title="dialogTItle">
+    <el-dialog :visible="!!editingProjectKey" :show-close="false">
       <ProjectEditor 
         :projectKey="editingProjectKey" 
         @closeDialog="editingProjectKey = null" 
@@ -88,10 +88,6 @@ export default {
     }
   },
   computed: {
-    dialogTItle() {
-      const project = _.find(this.projects, ['.key', this.editingProjectKey])
-      return project ? `編輯 ${project.name}` : '新增專案'
-    },
     ...mapState(['activeProjectKey']),
   },
   watch: {
@@ -124,13 +120,13 @@ export default {
           })
       }
     },
-    editProejct(ProjectKey) {
+    editProject(ProjectKey) {
       this.editingProjectKey = ProjectKey
     },
-    createProejct() {
+    createProject() {
       this.$refs['newProjectForm'].validate(valid => {
         if (valid) {
-          this.editProejct(
+          this.editProject(
             this.$firebaseRefs.projects.push(this.newProject).key
           )
         } else {
@@ -186,7 +182,7 @@ export default {
 
 .listBlock {
   padding-top: 25px;
-  #createProejctButton {
+  #createProjectButton {
     border-color: orange;
 
     &:hover {
