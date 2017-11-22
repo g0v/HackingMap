@@ -2,8 +2,7 @@
   <div id="app">
     <el-container style="height: 100%">
       <el-header>
-        Header
-        <p>{{msg}}</p>
+        <h3 style="color: #3a3a3a;">g0v Hacking Map <sub><i>Beta</i></sub> </h3>
       </el-header>
       <el-container>
         <el-aside>
@@ -29,10 +28,39 @@ export default {
     }
   },
   computed: {},
-  methods: {},
+  methods: {
+    showGuide() {
+      this.$notify({
+        title: '簡易 操作說明 🎅',
+        message: '左側列表可編輯專案，並在地圖上 新增/刪除 該專案。地圖上的專案皆可自由拖移調整位置。',
+        duration: 8500,
+      })
+    },
+    showAnnouncement() {
+      this.$notify({
+        title: ' 這次大松為初次 Beta 測試 🎁',
+        message: `
+          <h4>後續規劃：</h4>
+          <p>１ 開源至 g0v Github 。</p>
+          <p>２ 確認需求（e.g. 更新底圖）。</p>
+          <p>３ 優化整體 UI 🐳 。</p>
+        `,
+        duration: 12500,
+        showClose: false,
+        dangerouslyUseHTMLString: true,
+        offset: 150,
+      })
+    },
+  },
   components: {
     TheList,
     TheMap,
+  },
+  mounted() {
+    this.$message(this.msg)
+
+    this.showGuide()
+    this.showAnnouncement()
   },
 }
 </script>
