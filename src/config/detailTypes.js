@@ -17,7 +17,7 @@ const detailTypes = {
     prefix: '',
     format: urlRegex,
     formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
-    isRequired: true,
+    isRequired: false,
   },
   slide: {
     name: 'Slide',
