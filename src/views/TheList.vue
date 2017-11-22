@@ -34,16 +34,30 @@
               :icon="project.position ? 'el-icon-delete' : 'el-icon-location'"
               @click="mapButtonClick(project)"
             > Map </el-button>
-            <el-button size="small" icon="el-icon-edit-outline" round> Edit </el-button>
+            <el-button @click="editProject(project['.key'])" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
           <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
         </el-collapse-item>
       </template>
     </el-collapse>
+
+    <!-- Add new project -->
+    <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true">
+      <el-form-item prop="name" :rules="{ min: 3, max: 30, message: '須介於 3 ~ 30 個字元', trigger: 'blur' }">
+        <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button id="createProjectButton" @click="createProject" size="small">新增</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- Project Editor -->
+    <ProjectEditor :projectKey.sync="editingProjectKey" />
   </div>
 </template>
   
 <script>
+import ProjectEditor from '@/views/ProjectEditor'
 import _ from 'lodash'
 import { mapState } from 'vuex'
 
@@ -59,6 +73,13 @@ export default {
     return {
       ready: false,
       detailTypes,
+      editingProjectKey: null,
+      newProject: {
+        name: '',
+        detail: {
+          note: 'https://hackmd.io/',
+        },
+      },
     }
   },
   computed: {
@@ -94,8 +115,24 @@ export default {
           })
       }
     },
+    editProject(ProjectKey) {
+      this.editingProjectKey = ProjectKey
+    },
+    createProject() {
+      this.$refs['newProjectForm'].validate(valid => {
+        if (valid) {
+          this.editProject(
+            this.$firebaseRefs.projects.push(this.newProject).key
+          )
+        } else {
+          this.$message({ message: '格式有誤', type: 'warning' })
+        }
+      })
+    },
   },
-  components: {},
+  components: {
+    ProjectEditor,
+  },
 }
 </script>
 
@@ -136,5 +173,17 @@ export default {
 
 .buttons {
   margin: 20px 5px 0px;
+}
+
+.listBlock {
+  padding-top: 25px;
+  #createProjectButton {
+    border-color: orange;
+
+    &:hover {
+      background-color: white;
+      color: orange;
+    }
+  }
 }
 </style>
