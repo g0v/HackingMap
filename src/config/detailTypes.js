@@ -46,6 +46,15 @@ const detailTypes = {
     formatErrorMessage: '請輸入有效的 GitHub repo 網址',
     isRequired: false,
   },
+  website: {
+    name: 'Website',
+    description: '專案網站、討論區、社團',
+    icon: 'fa fa-window-maximize',
+    prefix: '',
+    format: urlRegex,
+    formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
+    isRequired: false,
+  },
 }
 
 export { detailTypes }
