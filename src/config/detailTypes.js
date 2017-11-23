@@ -3,11 +3,11 @@ const urlRegex = /http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\
 const detailTypes = {
   slack: {
     name: 'Slack',
-    description: '專案的 Slack 邀請 URL',
+    description: '專案於 g0v Slack 的 Channel 或 User ID',
     icon: 'fa fa-slack',
-    prefix: 'slack://search?team=T02G2SXKM&query=',
-    format: /(@|#)\w+$/,
-    formatErrorMessage: 'Slack帳號需為 @ 或 # 開頭喔！',
+    prefix: 'https://g0v-tw.slack.com/messages/',
+    format: /^\w+$/,
+    formatErrorMessage: '不含標點，且不需 @ 或 # 開頭！',
     isRequired: false,
   },
   note: {
@@ -44,6 +44,15 @@ const detailTypes = {
     prefix: '',
     format: /https:\/\/github.com\/\w+\/\w+(\.git)?/,
     formatErrorMessage: '請輸入有效的 GitHub repo 網址',
+    isRequired: false,
+  },
+  website: {
+    name: 'Website',
+    description: '專案網站、討論區、社團',
+    icon: 'fa fa-window-maximize',
+    prefix: '',
+    format: urlRegex,
+    formatErrorMessage: '請輸入 http(s):// 開頭的有效網址',
     isRequired: false,
   },
 }
