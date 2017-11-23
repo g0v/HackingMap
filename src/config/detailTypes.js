@@ -3,11 +3,11 @@ const urlRegex = /http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\
 const detailTypes = {
   slack: {
     name: 'Slack',
-    description: '專案的 Slack 邀請 URL',
+    description: '專案於 g0v Slack 的 Channel 或 User ID',
     icon: 'fa fa-slack',
-    prefix: 'slack://search?team=T02G2SXKM&query=',
-    format: /(@|#)\w+$/,
-    formatErrorMessage: 'Slack帳號需為 @ 或 # 開頭喔！',
+    prefix: 'https://g0v-tw.slack.com/messages/',
+    format: /^\w+$/,
+    formatErrorMessage: '不含標點，且不需 @ 或 # 開頭！',
     isRequired: false,
   },
   note: {
