@@ -107,7 +107,7 @@ a {
 
 .el-main {
   padding: 0px;
-  background-color: #E9EEF3;
+  background-color: #fdfdfd;
   height: calc(100vh - 60px);
 }
 
