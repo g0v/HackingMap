@@ -43,7 +43,7 @@
 
     <!-- Add new project -->
     <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true" @submit.native.prevent>
-      <el-form-item prop="name" :rules="{ min: 3, max: 30, message: '須介於 3 ~ 30 個字元', trigger: 'blur' }">
+      <el-form-item prop="name" :rules="{ validator: validProjectName }">
         <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
       </el-form-item>
       <el-form-item>
@@ -129,6 +129,10 @@ export default {
         }
       })
     },
+    validProjectName: ProjectEditor.methods.composeValidator(
+      ProjectEditor.methods.validRequire(true),
+      ProjectEditor.methods.validChineseLength(3, 20)
+    ),
   },
   components: {
     ProjectEditor,

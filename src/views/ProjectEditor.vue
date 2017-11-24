@@ -12,22 +12,18 @@
       <!-- Name -->
       <el-form-item 
         label="專案名稱" 
-        prop="name"
-        :rules="[
-          { required: true, message: '此欄位為必填', trigger: 'change' },
-          { min: 3, max: 30, message: '長度須介於 3 到 30 個字元', trigger: 'change' }
-        ]" >
+        prop="name" 
+        required
+        :rules="{ validator: composeValidator(validRequire(true, '專案名稱為必填'), composeValidator(validChineseLength(3, 20))) }" >
         <el-input v-model="form.name" />
       </el-form-item>
 
       <!-- Description -->
       <el-form-item 
         label="簡介" 
-        prop="desc" 
-        :rules="[
-          { required: true, message: '此欄位為必填', trigger: 'change' },
-          { min: 5, max: 50, message: '長度須介於 5 到 50 個字元', trigger: 'change' } 
-        ]" >
+        prop="desc"
+        required
+        :rules="{ validator: composeValidator(validRequire(true), validChineseLength(5, 50)) }" >
         <el-input 
           v-model="form.desc" 
           type="textarea" 
@@ -47,7 +43,7 @@
         :key="key"
         :prop="'detail.' + key"
         :required="item.isRequired"
-        :rules="{ validator: makeRegexValidator(item.format, item.formatErrorMessage, item.isRequired) }" >
+        :rules="{ validator: composeValidator(validRegex(item.format, item.formatErrorMessage), validRequire(item.isRequired)) }" >
         <el-input 
           v-model="form.detail[key]"
           :placeholder="item.description" 
@@ -131,6 +127,37 @@ export default {
     },
   },
   methods: {
+    composeValidator(...validators) {
+      // Validator function signature of <el-form-item>
+      return (rules, value, callback) => {
+        validators.forEach(validator => {
+          validator(null, value, err => (err ? callback(err) : null))
+        })
+        // all validator pass!
+        callback()
+      }
+    },
+    validRequire: (isRequired, message) => (_, value, callback) => {
+      isRequired && !value
+        ? callback(new Error(message || '此欄為必填'))
+        : callback()
+    },
+    validRegex: (regex, message) => (_, value, callback) => {
+      regex.test(value) || !value
+        ? callback()
+        : callback(new Error(message || `格式錯誤（${regex}）`))
+    },
+    validChineseLength: (min, max) => (_, value, callback) => {
+      const len = value.replace(/[^\x00-\xff]/g, 'XX').length / 2
+      const valid = len >= min && len <= max
+      if (valid || !value) {
+        callback()
+      } else {
+        len < min
+          ? callback(new Error(`輸入過短（${len}/${min}字）`))
+          : callback(new Error(`輸入過長（${len}/${max}字）`))
+      }
+    },
     updateFirebaseDB(key, payload) {
       // console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
       this.loadingSubmit = true
@@ -177,21 +204,6 @@ export default {
           return false
         }
       })
-    },
-    makeRegexValidator(regex, errorMessage, required) {
-      return (rule, value, callback) => {
-        const empty = !value
-
-        if (empty && required) {
-          callback('此欄位為必填')
-        } else if (empty && !required) {
-          callback()
-        } else if (!empty && regex.test(value)) {
-          callback()
-        } else {
-          callback(new Error(errorMessage))
-        }
-      }
     },
     askShiftKey() {
       this.$message.error('請按著 Shift 鍵')
