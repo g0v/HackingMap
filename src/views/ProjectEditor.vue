@@ -131,6 +131,17 @@ export default {
     },
   },
   methods: {
+    validChineseLength: (min, max) => (_, value, callback) => {
+      const len = value.replace(/[^\x00-\xff]/g, 'XX').length / 2
+      const valid = len >= min && len <= max
+      if (valid || !value) {
+        callback()
+      } else {
+        len < min
+          ? callback(new Error(`輸入過短（${len}/${min}字）`))
+          : callback(new Error(`輸入過長（${len}/${max}字）`))
+      }
+    },
     updateFirebaseDB(key, payload) {
       // console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
       this.loadingSubmit = true
