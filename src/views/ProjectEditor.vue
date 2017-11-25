@@ -75,6 +75,14 @@ import { db } from '@/service/firebase'
 import { detailTypes } from '@/config/detailTypes.js'
 import _ from 'lodash'
 
+const initFormData = {
+  name: '',
+  desc: '',
+  keywords: [],
+  // Custom fields defined in config/detailTyoe.js
+  detail: _.mapValues(detailTypes, () => ''),
+}
+
 export default {
   name: 'ProjectEditor',
   components: {
@@ -92,13 +100,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {
-        name: '',
-        desc: '',
-        keywords: [],
-        // Custom fields defined in config/detailTyoe.js
-        detail: _.mapValues(detailTypes, () => ''),
-      },
+      form: initFormData,
       loadingSubmit: false,
       formLabelWidth: '120px',
       detailTypes,
@@ -118,10 +120,13 @@ export default {
     dialogVisible(visible) {
       if (visible) {
         // Restore fields for current project
-        this.form = _.defaultsDeep(this.restoreFields, this.form)
+        this.form = _.defaultsDeep(this.restoreFields, this.initFormData)
       } else {
         // Reset fields to blank
-        this.$refs['projectEditorForm'].resetFields()
+        this.form = _.defaultsDeep(this.restoreFields, this.initFormData)
+        // TODO: fix resetFields() and use it instead, by giving the
+        // right `initialValue` when each <el-form-item> mount.
+        //this.$refs['projectEditorForm'].resetFields()
         this.$emit('update:projectKey', null)
       }
     },
