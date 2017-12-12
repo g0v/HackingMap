@@ -12,7 +12,7 @@
           <TheMap/>
         </el-main>
       </el-container>
-      <el-dialog :visible="isEditing">
+      <el-dialog :visible="isEditing" :show-close="false">
         <ProjectEditor/>
       </el-dialog>
     </el-container>
