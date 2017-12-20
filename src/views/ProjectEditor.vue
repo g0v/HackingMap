@@ -1,7 +1,4 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" :show-close="true">
-    <div slot="title">編輯 {{ restoreFields.name }}</div>
-
     <el-form 
       :model="form"
       ref="projectEditorForm"
@@ -10,7 +7,7 @@
     >
 
       <!-- Name -->
-      <el-form-item 
+      <el-form-item
         label="專案名稱" 
         prop="name" 
         required
@@ -62,76 +59,67 @@
           class="float-left"
           @click="submitForm('projectEditorForm')" :loading="loadingSubmit"
         >儲 存</el-button>
-        <el-button icon="el-icon-close" class="float-left" @click="dialogVisible = false">取 消</el-button>
+        <el-button icon="el-icon-close" class="float-left" @click="cancelEditing">取 消</el-button>
       </el-form-item>
 
     </el-form>
-  </el-dialog>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import DynamicTags from '@/components/DynamicTags'
 import { db } from '@/service/firebase'
 import { detailTypes } from '@/config/detailTypes.js'
 import _ from 'lodash'
-
-const initFormData = {
-  name: '',
-  desc: '',
-  keywords: [],
-  // Custom fields defined in config/detailTyoe.js
-  detail: _.mapValues(detailTypes, () => ''),
-}
 
 export default {
   name: 'ProjectEditor',
   components: {
     DynamicTags,
   },
-  props: {
-    projectKey: {
-      type: String,
-      required: false,
-    },
-  },
   firebase: {
     projects: db.ref('projects'),
   },
   data() {
     return {
-      dialogVisible: false,
-      form: initFormData,
+      form: {
+        name: '',
+        desc: '',
+        keywords: [],
+        // Custom fields defined in config/detailTyoe.js
+        detail: _.mapValues(detailTypes, () => ''),
+      },
       loadingSubmit: false,
       formLabelWidth: '120px',
       detailTypes,
     }
   },
   computed: {
-    restoreFields() {
-      const project = _.find(this.projects, ['.key', this.projectKey])
-      return project ? _.omit(project, '.key') : {}
-    },
+    ...mapState(['editingProject']),
+  },
+  mounted() {
+    this.restoreForm()
   },
   watch: {
-    projectKey(key) {
-      // Whether a projectKey is passed triggers dialog to show/hide
-      this.dialogVisible = !!key
-    },
-    dialogVisible(visible) {
-      if (visible) {
-        // Restore fields for current project
-        this.form = _.defaultsDeep(this.restoreFields, this.initFormData)
-      } else {
-        // Reset fields to blank
-        this.form = _.defaultsDeep(this.restoreFields, this.initFormData)
-        // TODO: fix resetFields() and use it instead, by giving the
-        // right `initialValue` when each <el-form-item> mount.
-        //this.$refs['projectEditorForm'].resetFields()
-        this.$emit('update:projectKey', null)
+    editingProject(project) {
+      if (project) {
+        this.restoreForm()
       }
     },
   },
   methods: {
+    restoreForm() {
+      console.log('Restoring')
+      this.$refs['projectEditorForm'].resetFields()
+      this.$nextTick(function() {
+        let copy = _.cloneDeep(this.editingProject)
+        _.defaultsDeep(copy, this.form)
+        this.form = copy
+      })
+    },
+    cancelEditing() {
+      this.$store.commit('setEditingProject', null)
+    },
     composeValidator(...validators) {
       // Validator function signature of <el-form-item>
       return (rules, value, callback) => {
@@ -165,6 +153,7 @@ export default {
     },
     updateFirebaseDB(key, payload) {
       // console.log('[ProjectEditor] updateFirebaseDB ', key, payload)
+      payload = _.omit(payload, '.key')
       this.loadingSubmit = true
       this.$firebaseRefs.projects
         .child(key)
@@ -172,7 +161,7 @@ export default {
         .then(() => {
           this.loadingSubmit = false
           this.$message(`${payload.name} 更新成功`)
-          this.dialogVisible = false
+          this.cancelEditing()
         })
         .catch(error => {
           this.loadingSubmit = false
@@ -189,7 +178,7 @@ export default {
         .set(null)
         .then(() => {
           this.$message(`刪除成功`)
-          this.dialogVisible = false
+          this.cancelEditing()
         })
         .catch(error => {
           this.$message.error('刪除專案失敗：', error.message)
@@ -203,7 +192,7 @@ export default {
             // Ignore empty detail fileds aka ""
             detail: _.omitBy(this.form.detail, _.isEmpty),
           }
-          this.updateFirebaseDB(this.projectKey, payload)
+          this.updateFirebaseDB(this.editingProject['.key'], payload)
         } else {
           this.$message.error('格式有誤')
           return false

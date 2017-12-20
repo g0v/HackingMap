@@ -34,7 +34,7 @@
               :icon="project.position ? 'el-icon-delete' : 'el-icon-location'"
               @click="mapButtonClick(project)"
             > Map </el-button>
-            <el-button @click="editProject(project['.key'])" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
+            <el-button @click="setEditingProject(project)" size="small" icon="el-icon-edit-outline" round> Edit </el-button>
           </div>
           <!-- <div :ref="`projectItem_${project['.key']}`"></div> -->
         </el-collapse-item>
@@ -51,8 +51,6 @@
       </el-form-item>
     </el-form>
 
-    <!-- Project Editor -->
-    <ProjectEditor :projectKey.sync="editingProjectKey" />
   </div>
 </template>
   
@@ -73,7 +71,6 @@ export default {
     return {
       ready: false,
       detailTypes,
-      editingProjectKey: null,
       newProject: {
         name: '',
         detail: {
@@ -115,15 +112,27 @@ export default {
           })
       }
     },
-    editProject(ProjectKey) {
-      this.editingProjectKey = ProjectKey
+    setEditingProject(project) {
+      this.$store.commit('setEditingProject', project)
     },
     createProject() {
       this.$refs['newProjectForm'].validate(valid => {
         if (valid) {
-          this.editProject(
-            this.$firebaseRefs.projects.push(this.newProject).key
-          )
+          const key = this.newProject.name
+          this.$firebaseRefs.projects
+            .child(key)
+            .update(this.newProject)
+            .then(() => {
+              // TODO: Simplify this
+              this.$message({ message: '建立成功', type: 'success' })
+              this.setEditingProject({
+                ...this.newProject,
+                '.key': key,
+              })
+            })
+            .catch(err => {
+              this.$message.error('建立失敗')
+            })
         } else {
           this.$message({ message: '格式有誤', type: 'warning' })
         }
@@ -133,9 +142,6 @@ export default {
       ProjectEditor.methods.validRequire(true),
       ProjectEditor.methods.validChineseLength(3, 20)
     ),
-  },
-  components: {
-    ProjectEditor,
   },
 }
 </script>

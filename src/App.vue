@@ -12,13 +12,18 @@
           <TheMap/>
         </el-main>
       </el-container>
+      <el-dialog :visible="isEditing" :show-close="false">
+        <ProjectEditor/>
+      </el-dialog>
     </el-container>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import TheList from '@/views/TheList'
 import TheMap from '@/views/TheMap'
+import ProjectEditor from '@/views/ProjectEditor'
 
 export default {
   name: 'app',
@@ -27,7 +32,9 @@ export default {
       msg: 'Welcome to g0v Hacking Map',
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['isEditing']),
+  },
   methods: {
     showGuide() {
       this.$notify({
@@ -55,6 +62,7 @@ export default {
   components: {
     TheList,
     TheMap,
+    ProjectEditor,
   },
   mounted() {
     this.$message(this.msg)
