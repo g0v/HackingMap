@@ -1,6 +1,15 @@
 const urlRegex = /http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
 
 const detailTypes = {
+  recruiting: {
+    name: '徵人中',
+    description: '徵求坑主、前端、後端、設計師...',
+    icon: 'fa fa-users',
+    prefix: '#徵 ',
+    format: /.*/,
+    formatErrorMessage: '',
+    isRequired: false,
+  },
   slack: {
     name: 'Slack',
     description: '專案於 g0v Slack 的 Channel 或 User ID',
