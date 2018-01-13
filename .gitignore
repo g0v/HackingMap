@@ -1,6 +1,3 @@
-# Webpack build output
-dist/
-
 # Firebase hosting directory
 public/
 
