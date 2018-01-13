@@ -32,6 +32,13 @@
         >
           <circle :r="project['.key'] == activeProjectKey ? 35 : 30"/>
           <text>{{project.name}}</text>
+          <g
+            v-if="project.detail && project.detail.recruiting" 
+            :transform="project['.key'] == activeProjectKey ? 'translate(25, -25)' : 'translate(21, -21)'"
+          >
+            <circle fill="red" r="10"/>
+            <text fill="white" x="-6" y="4" font-size="12">徵</text>
+          </g>
         </g>
       </template>
 
@@ -217,8 +224,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#theMap {
-}
 
 #svg {
   // width: 100vw;
@@ -238,12 +243,12 @@ g.projectNode {
     transition: 0.5s;
   }
 
-  circle {
+  > circle {
     fill: white;
     stroke: #CCC;
     stroke-width: 2;
   }
-  text {
+  > text {
     text-anchor: middle;
     dominant-baseline: middle;
     font-size: 8px;
@@ -256,17 +261,16 @@ g.projectNode {
       opacity: 0.9;
     }
 
-    circle {
+
+    > circle {
       stroke: #fe6969;
       stroke-width: 3;
       opacity: 0.9;
-      r: 35;
       animation: stroke-blinker 1.5s ease-in infinite;
     }
-    text {
+    > text {
       font-size: 14px;
     }
-
   }
 }
 
