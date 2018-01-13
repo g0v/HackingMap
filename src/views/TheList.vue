@@ -1,5 +1,17 @@
 <template>
   <div id="theList">
+
+    <!-- 新增專案欄位 -->
+    <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true" @submit.native.prevent>
+      <el-form-item prop="name" :rules="{ validator: validProjectName }">
+        <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button id="createProjectButton" @click="createProject" size="small">新增</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- 各專案卡片 -->
     <el-collapse :value="activeProjectKey" @change="setActiveProjectKey" accordion>
       <template v-for="(project, key) in projects">
         <el-collapse-item
@@ -40,16 +52,6 @@
         </el-collapse-item>
       </template>
     </el-collapse>
-
-    <!-- Add new project -->
-    <el-form class="listBlock" ref="newProjectForm" :model="newProject" :inline="true" @submit.native.prevent>
-      <el-form-item prop="name" :rules="{ validator: validProjectName }">
-        <el-input placeholder="專案名稱" v-model="newProject.name" size="small"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button id="createProjectButton" @click="createProject" size="small">新增</el-button>
-      </el-form-item>
-    </el-form>
 
   </div>
 </template>
@@ -116,6 +118,10 @@ export default {
       this.$store.commit('setEditingProject', project)
     },
     createProject() {
+      if (!this.newProject.name) {
+        this.$message.error('專案名稱不可為空')
+        return
+      }
       this.$refs['newProjectForm'].validate(valid => {
         if (valid) {
           const key = this.newProject.name
@@ -129,6 +135,7 @@ export default {
                 ...this.newProject,
                 '.key': key,
               })
+              this.newProject.name = ''
             })
             .catch(err => {
               this.$message.error('建立失敗')
@@ -138,10 +145,7 @@ export default {
         }
       })
     },
-    validProjectName: ProjectEditor.methods.composeValidator(
-      ProjectEditor.methods.validRequire(true),
-      ProjectEditor.methods.validChineseLength(3, 20)
-    ),
+    validProjectName: ProjectEditor.methods.validChineseLength(3, 20),
   },
 }
 </script>
