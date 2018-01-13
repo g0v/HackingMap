@@ -118,6 +118,10 @@ export default {
       this.$store.commit('setEditingProject', project)
     },
     createProject() {
+      if (!this.newProject.name) {
+        this.$message.error('專案名稱不可為空')
+        return
+      }
       this.$refs['newProjectForm'].validate(valid => {
         if (valid) {
           const key = this.newProject.name
@@ -131,6 +135,7 @@ export default {
                 ...this.newProject,
                 '.key': key,
               })
+              this.newProject.name = ''
             })
             .catch(err => {
               this.$message.error('建立失敗')
@@ -140,10 +145,7 @@ export default {
         }
       })
     },
-    validProjectName: ProjectEditor.methods.composeValidator(
-      ProjectEditor.methods.validRequire(true),
-      ProjectEditor.methods.validChineseLength(3, 20)
-    ),
+    validProjectName: ProjectEditor.methods.validChineseLength(3, 20),
   },
 }
 </script>
