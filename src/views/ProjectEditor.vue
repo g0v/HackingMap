@@ -52,7 +52,7 @@
         <el-button
           icon="el-icon-delete" type="danger" plain
           class="float-right"
-          @click="deleteProject(projectKey, $event)"
+          @click="deleteProject(form['.key'], $event)"
         >刪 除</el-button>
         <el-button
           icon="el-icon-upload2" type="primary" 
